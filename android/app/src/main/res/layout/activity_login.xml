@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    tools:context=".app.vista.Login">
 
     <TextView
         android:id="@+id/Identificate"
@@ -23,14 +23,14 @@
         app:layout_constraintVertical_bias="0.32" />
 
     <EditText
-        android:id="@+id/Contraseña"
+        android:id="@+id/contrasena"
         android:layout_width="309dp"
         android:layout_height="38dp"
         android:background="@color/gris"
         android:ems="10"
         android:padding="10dp"
         android:inputType="numberPassword"
-        android:text="Contraseña"
+        android:hint="Contraseña"
         android:textColor="@color/grisoscuro"
         android:textSize="30px"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,14 +41,14 @@
         app:layout_constraintVertical_bias="0.467" />
 
     <EditText
-        android:id="@+id/Correo"
+        android:id="@+id/correo"
         android:layout_width="311dp"
         android:layout_height="37dp"
         android:background="@color/gris"
         android:ems="10"
         android:padding="10dp"
         android:inputType="textEmailAddress"
-        android:text="Correo"
+        android:hint="Correo"
         android:textColor="@color/grisoscuro"
         android:textSize="30px"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,8 +73,9 @@
 
     <TextView
         android:id="@+id/cuenta"
-        android:layout_width="102dp"
-        android:layout_height="14dp"
+        android:layout_width="96dp"
+        android:layout_height="17dp"
+        android:gravity="center"
         android:text="¿No tienes cuenta aún?"
         android:textColor="@color/grisoscuro"
         android:textSize="26px"
