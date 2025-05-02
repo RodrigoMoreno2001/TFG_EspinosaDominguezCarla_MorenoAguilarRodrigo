@@ -20,7 +20,10 @@ class APITestInstrumented {
     fun conexionAPI() {
         val latch = CountDownLatch(1)
 
-        val dto = AutenticarDTO("usuario@dominio.com", "1234")
+        // Aqui deben ir credenciales correctas dado
+        // a que es una prueba real y no con Mockito
+
+        val dto = AutenticarDTO("usuario@domino.exe", "1234")
 
         RetrofitClient.usuarioService.autenticar(dto).enqueue(object : Callback<UsuarioDTO> {
             override fun onResponse(call: Call<UsuarioDTO>, response: Response<UsuarioDTO>) {
@@ -37,5 +40,4 @@ class APITestInstrumented {
         val isCompleted = latch.await(30, TimeUnit.SECONDS)
         assertTrue("La llamada a la API tardó demasiado", isCompleted)
     }
-
 }

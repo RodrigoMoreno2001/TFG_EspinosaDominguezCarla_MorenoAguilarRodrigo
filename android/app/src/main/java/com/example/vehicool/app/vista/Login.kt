@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,12 @@ class Login : AppCompatActivity() {
         val correoInput = findViewById<EditText>(R.id.correo)
         val contrasenaInput = findViewById<EditText>(R.id.contrasena)
         val accederBtn = findViewById<Button>(R.id.Acceder)
+        val registro = findViewById<TextView>(R.id.Registro)
+
+        registro.setOnClickListener {
+            val intent = Intent(this@Login, Registro::class.java)
+            startActivity(intent)
+        }
 
         accederBtn.setOnClickListener {
             val correo = correoInput.text.toString()
