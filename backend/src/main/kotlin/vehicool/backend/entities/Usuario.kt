@@ -1,21 +1,26 @@
 package vehicool.backend.entities
-
-
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "usuarios")
 data class Usuario(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
-
-    @Column
-    val correo: String = "",
-    @Column
+    var id: Long = 0,
     val nombre: String = "",
-    @Column
-    val pass: String = "",
+    @Column(unique = true)
+    val correo: String = "",
+    val contrasena: String = "",
+    val privilegios: String = "",
 
-    val telefono: String = ""
+    @OneToMany(mappedBy = "usuario", cascade = [CascadeType.ALL])
+    val vehiculos: List<Vehiculo> = emptyList(),
+
+    @OneToMany(mappedBy = "usuario", cascade = [CascadeType.ALL])
+    val facturas: List<Factura> = emptyList(),
+
+    @OneToMany(mappedBy = "emisor", cascade = [CascadeType.ALL])
+    val chatsEnviados: List<Chat> = emptyList(),
+
+    @OneToMany(mappedBy = "receptor", cascade = [CascadeType.ALL])
+    val chatsRecibidos: List<Chat> = emptyList()
 )
