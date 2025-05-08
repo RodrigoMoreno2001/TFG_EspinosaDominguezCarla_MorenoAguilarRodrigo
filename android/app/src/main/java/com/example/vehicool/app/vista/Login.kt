@@ -81,7 +81,7 @@ class Login : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         val usuario = response.body()
                         Toast.makeText(this@Login, "Bienvenido ${usuario?.nombre}", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@Login, ActivityInicio::class.java)
+                        val intent = Intent(this@Login, AppActivity::class.java)
                         startActivity(intent)
                     } else {
                         Toast.makeText(this@Login, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
