@@ -1,4 +1,4 @@
-package vehicool.backend.DTO
+package vehicool.backend.DTO.salida
 
 data class UsuarioDTO(
     val id: Long,

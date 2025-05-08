@@ -1,6 +1,6 @@
 package vehicool.backend.mapeadores
 
-import vehicool.backend.DTO.UsuarioDTO
+import vehicool.backend.DTO.salida.UsuarioDTO
 import vehicool.backend.entities.Usuario
 
 fun Usuario.usuarioToDTO(): UsuarioDTO {

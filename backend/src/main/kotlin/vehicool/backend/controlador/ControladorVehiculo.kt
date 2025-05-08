@@ -3,7 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import vehicool.backend.DTO.VehiculoDTO
+import vehicool.backend.DTO.salida.VehiculoDTO
 import vehicool.backend.entities.Vehiculo
 import vehicool.backend.repositorio.RepositorioVehiculo
 import vehicool.backend.servicio.api.VehiculoServiceAPI
@@ -34,5 +34,10 @@ class ControladorVehiculo(private val repositorioVehiculo: RepositorioVehiculo) 
     fun eliminarVehiculo(@PathVariable id: Long): ResponseEntity<Void> {
         vehiculoServiceAPI.eliminarCoche(id)
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/usuarios/{id}")
+    fun getVehiculoPorUsuario(@PathVariable id: Long):  List<VehiculoDTO> {
+        return vehiculoServiceAPI.obtenerPorIdUsuarioDTO(id)
     }
 }

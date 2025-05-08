@@ -5,7 +5,8 @@ import vehicool.backend.servicio.api.ReparacionServiceAPI
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
-import vehicool.backend.DTO.ReparacionDTO
+import vehicool.backend.DTO.salida.ReparacionDTO
+import vehicool.backend.DTO.entrada.ReparacionInputDTO
 import vehicool.backend.entities.Reparacion
 import vehicool.backend.mapeadores.reparacionToDTO
 import vehicool.backend.repositorio.RepositorioFactura
@@ -33,25 +34,23 @@ class ReparacionesServiceImpl : GenericServiceImpl<Reparacion, Long>(), Reparaci
         return dao.findById(id).orElse(null)?.reparacionToDTO()
     }
 
-    override fun crearReparacion(reparacion: Reparacion): ReparacionDTO? {
+    override fun crearReparacion(dto: ReparacionInputDTO): ReparacionDTO? {
 
-        val vehiculoId = reparacion.vehiculo.id
-
-        val facturaId = reparacion.factura?.id
-
-        val vehiculo = repositorioVehiculo.findById(vehiculoId)
-            .orElseThrow { RuntimeException("Vehículo no encontrado con id $vehiculoId") }
-
-        val factura = facturaId?.let {
-            repositorioFactura.findById(it)
-                .orElseThrow { RuntimeException("Factura no encontrada con id $facturaId") }
+        val vehiculo = repositorioVehiculo.findById(dto.vehiculoId).orElseThrow {
+            RuntimeException("Vehículo no encontrado")
         }
 
-        reparacion.vehiculo = vehiculo
-
-        if(facturaId!=null){
-            reparacion.factura = factura
+        val factura = dto.facturaId?.let {
+            repositorioFactura.findById(it).orElse(null)
         }
+
+        val reparacion = Reparacion(
+            id = dto.id,
+            estado = dto.estado,
+            servicios = dto.servicios,
+            vehiculo = vehiculo,
+            factura = factura
+        )
 
         return dao.save(reparacion).reparacionToDTO()
     }

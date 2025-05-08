@@ -1,4 +1,4 @@
-package vehicool.backend.DTO
+package vehicool.backend.DTO.entrada
 
 data class AutenticarDTO(
     val correo: String,

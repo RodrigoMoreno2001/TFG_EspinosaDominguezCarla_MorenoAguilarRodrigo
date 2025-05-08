@@ -1,19 +1,17 @@
 package vehicool.backend.servicio.impl
 
 import vehicool.backend.genericas.GenericServiceImpl
-import vehicool.backend.servicio.api.ReparacionServiceAPI
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
-import vehicool.backend.DTO.FacturaDTO
-import vehicool.backend.DTO.ReparacionDTO
+import vehicool.backend.DTO.salida.FacturaDTO
+import vehicool.backend.DTO.entrada.FacturaInputDTO
 import vehicool.backend.entities.Factura
-import vehicool.backend.entities.Reparacion
 import vehicool.backend.mapeadores.facturaToDTO
-import vehicool.backend.mapeadores.reparacionToDTO
+import vehicool.backend.mapeadores.toFactura
 import vehicool.backend.repositorio.RepositorioFactura
 import vehicool.backend.repositorio.RepositorioReparacion
-import vehicool.backend.repositorio.RepositorioVehiculo
+import vehicool.backend.repositorio.RepositorioUsuario
 import vehicool.backend.servicio.api.FacturaServiceAPI
 
 @Service
@@ -23,7 +21,10 @@ class FacturaServiceImpl : GenericServiceImpl<Factura, Long>(), FacturaServiceAP
     lateinit var repositorioFactura: RepositorioFactura
 
     @Autowired
-    lateinit var reparacionRepository: RepositorioReparacion
+    lateinit var usuarioRepositorio: RepositorioUsuario
+
+    @Autowired
+    lateinit var reparacionRepositorio: RepositorioReparacion
 
     override val dao: CrudRepository<Factura, Long>
         get() {
@@ -38,16 +39,19 @@ class FacturaServiceImpl : GenericServiceImpl<Factura, Long>(), FacturaServiceAP
         return dao.findById(id).orElse(null)?.facturaToDTO()
     }
 
-    override fun crearFactura(factura: Factura): FacturaDTO? {
-        val reparacionId = factura.reparacion?.id
-        val reparacion = reparacionId?.let {
-            reparacionRepository.findById(it).orElseThrow {
-                RuntimeException("Reparación no encontrada con id $reparacionId")
-            }
+    override fun obtenerPorIdUsuarioDTO(id: Long): List<FacturaDTO> {
+        return repositorioFactura.findAllByUsuarioId(id).map { it.facturaToDTO() }
+    }
+
+    override fun crearFactura(dto: FacturaInputDTO): FacturaDTO? {
+
+        val usuario = usuarioRepositorio.findById(dto.usuarioId).orElseThrow {
+            RuntimeException("Usuario no encontrado")
+        }
+        val reparacion =reparacionRepositorio.findById(dto.reparacionId).orElseThrow {
+            RuntimeException("Reparacion no encontrada")
         }
 
-        factura.reparacion = reparacion
-
-        return dao.save(factura).facturaToDTO()
+        return dao.save(dto.toFactura(usuario, reparacion)).facturaToDTO()
     }
 }

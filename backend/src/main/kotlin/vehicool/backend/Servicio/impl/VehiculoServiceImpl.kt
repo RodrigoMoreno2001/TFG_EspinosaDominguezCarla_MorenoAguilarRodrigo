@@ -3,8 +3,7 @@ package vehicool.backend.servicio.impl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
-import vehicool.backend.DTO.VehiculoDTO
-import vehicool.backend.entities.Usuario
+import vehicool.backend.DTO.salida.VehiculoDTO
 import vehicool.backend.entities.Vehiculo
 import vehicool.backend.genericas.GenericServiceImpl
 import vehicool.backend.mapeadores.vehiculoToDTO
@@ -30,8 +29,12 @@ class VehiculoServiceImpl : GenericServiceImpl<Vehiculo, Long>(), VehiculoServic
         return dao.findById(id).orElse(null)?.vehiculoToDTO()
     }
 
-    override fun crearCoche(vehiculo: Vehiculo): VehiculoDTO? {
+    override fun crearCoche(vehiculo: Vehiculo): VehiculoDTO {
         return dao.save(vehiculo).vehiculoToDTO()
+    }
+
+    override fun obtenerPorIdUsuarioDTO(id: Long): List<VehiculoDTO> {
+        return repositorioVehiculo.findAllByUsuarioId(id).map { it.vehiculoToDTO()}
     }
 
     override fun eliminarCoche(id: Long) {

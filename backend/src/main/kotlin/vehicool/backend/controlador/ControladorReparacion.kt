@@ -1,11 +1,9 @@
 package vehicool.backend.controlador
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import vehicool.backend.DTO.ReparacionDTO
-import vehicool.backend.DTO.ReparacionInputDTO
-import vehicool.backend.entities.Reparacion
+import vehicool.backend.DTO.salida.ReparacionDTO
+import vehicool.backend.DTO.entrada.ReparacionInputDTO
 import vehicool.backend.repositorio.RepositorioFactura
 import vehicool.backend.repositorio.RepositorioReparacion
 import vehicool.backend.repositorio.RepositorioVehiculo
@@ -34,25 +32,9 @@ class ControladorReparacion(private val repositorioReparacion: RepositorioRepara
     }
 
     @PostMapping("/")
-    fun crear(@RequestBody dto: ReparacionInputDTO): ResponseEntity<ReparacionDTO?> {
-        val vehiculo = vehiculoRepo.findById(dto.vehiculoId).orElseThrow {
-            RuntimeException("Vehículo no encontrado")
-        }
+    fun crearReparacion(@RequestBody dto: ReparacionInputDTO): ResponseEntity<ReparacionDTO?> {
 
-        val factura = dto.facturaId?.let {
-            facturaRepo.findById(it).orElse(null)
-        }
-
-        val reparacion = Reparacion(
-            estado = dto.estado,
-            servicios = dto.servicios,
-            vehiculo = vehiculo,
-            factura = factura
-        )
-
-        if(dto.id!=null) reparacion.id = dto.id
-
-        val creada = reparacionServiceAPI.crearReparacion(reparacion)
+        val creada = reparacionServiceAPI.crearReparacion(dto)
         return ResponseEntity.ok(creada)
     }
 }

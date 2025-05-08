@@ -5,7 +5,7 @@ import vehicool.backend.servicio.api.UsuarioServiceAPI
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
-import vehicool.backend.DTO.UsuarioDTO
+import vehicool.backend.DTO.salida.UsuarioDTO
 import vehicool.backend.entities.Usuario
 import vehicool.backend.mapeadores.usuarioToDTO
 import vehicool.backend.repositorio.RepositorioUsuario

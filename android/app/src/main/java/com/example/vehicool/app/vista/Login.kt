@@ -16,8 +16,10 @@ import com.example.vehicool.app.api.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import vehicool.backend.DTO.AutenticarDTO
-import vehicool.backend.DTO.UsuarioDTO
+import com.example.vehicool.app.DTO.salida.AutenticarDTO
+import vehicool.backend.DTO.entrada.FacturaDTO
+import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
+import vehicool.backend.DTO.entrada.UsuarioDTO
 
 class Login : AppCompatActivity() {
 
@@ -39,6 +41,30 @@ class Login : AppCompatActivity() {
         registro.setOnClickListener {
             val intent = Intent(this@Login, Registro::class.java)
             startActivity(intent)
+
+            val factura = FacturaOutputDTO(
+                6,
+                "2025-01-05",
+                130.0,
+                2,
+                1
+            )
+
+            RetrofitClient.facturaService.crearFactura(factura).enqueue(object : Callback<FacturaDTO> {
+                override fun onResponse(call: Call<FacturaDTO>, response: Response<FacturaDTO>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val factura = response.body()
+                        Log.e("LOGIN", "TE TENGO: $factura")
+                    } else {
+                        Toast.makeText(this@Login, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<FacturaDTO>, t: Throwable) {
+                    Log.e("LOGIN", "Error de conexión", t)
+                    Toast.makeText(this@Login, "Error al conectar a la API", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         accederBtn.setOnClickListener {
@@ -67,6 +93,8 @@ class Login : AppCompatActivity() {
                     Toast.makeText(this@Login, "Error al conectar a la API", Toast.LENGTH_SHORT).show()
                 }
             })
+
+
         }
     }
 

@@ -1,4 +1,4 @@
-package vehicool.backend.DTO
+package vehicool.backend.DTO.entrada
 import java.time.LocalDate
 
 data class FacturaInputDTO(

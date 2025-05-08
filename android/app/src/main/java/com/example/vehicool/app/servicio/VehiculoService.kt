@@ -4,17 +4,18 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import vehicool.backend.DTO.FacturaDTO
-import vehicool.backend.DTO.FacturaInputDTO
+import vehicool.backend.DTO.entrada.FacturaDTO
+import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
+import vehicool.backend.DTO.entrada.VehiculoDTO
 
-interface FacturaService {
+interface VehiculoService {
 
-    @GET("api/factura/{id}")
-    fun getFactura(@Path("id") id: Long): Call<FacturaDTO>
+    @GET("api/vehiculos/{id}")
+    fun getVehiculo(@Path("id") id: Long): Call<FacturaDTO>
 
-    @GET("api/factura/usuario/{id}")
-    fun getFacturaPorIdUsuario(@Path("id") id: Long): Call<List<FacturaDTO>>
+    @GET("api/vehiculos/usuarios/{id}")
+    fun getVehiculoPorIdUsuario(@Path("id") id: Long): Call<List<VehiculoDTO>>
 
-    @POST("api/factura/")
-    fun crearFactura(@Body factura: FacturaInputDTO): Call<FacturaDTO>
+    @POST("api/vehiculos/")
+    fun crearVehiculo(@Body vehiculo: FacturaOutputDTO): Call<FacturaDTO>
 }

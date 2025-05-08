@@ -1,10 +1,5 @@
-package vehicool.backend.DTO
+package vehicool.backend.DTO.salida
 
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToOne
-import vehicool.backend.entities.Factura
-import vehicool.backend.entities.Vehiculo
 import java.time.LocalDate
 
 data class ReparacionDTO(

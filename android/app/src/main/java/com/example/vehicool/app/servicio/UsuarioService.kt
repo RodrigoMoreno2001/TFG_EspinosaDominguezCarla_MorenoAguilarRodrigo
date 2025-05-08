@@ -1,11 +1,13 @@
 package com.example.vehicool.app.servicio
 
-import com.example.vehicool.app.DTO.Usuario
+import com.example.vehicool.app.entidades.Usuario
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
-import vehicool.backend.DTO.AutenticarDTO
-import vehicool.backend.DTO.UsuarioDTO
+import retrofit2.http.Path
+import com.example.vehicool.app.DTO.salida.AutenticarDTO
+import vehicool.backend.DTO.entrada.UsuarioDTO
 
 interface UsuarioService {
 
@@ -15,4 +17,6 @@ interface UsuarioService {
     @POST("api/usuarios/")
     fun crearUsuario(@Body usuario: Usuario): Call<UsuarioDTO>
 
+    @GET("api/usuarios/{id}")
+    fun getUsuario(@Path("id") id: Long): Call<UsuarioDTO>
 }

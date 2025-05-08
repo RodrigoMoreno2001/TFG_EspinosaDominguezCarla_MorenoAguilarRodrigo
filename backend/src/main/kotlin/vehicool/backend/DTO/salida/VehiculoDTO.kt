@@ -1,6 +1,4 @@
-package vehicool.backend.DTO
-
-import vehicool.backend.entities.Usuario
+package vehicool.backend.DTO.salida
 
 data class VehiculoDTO(
     val matricula: String = "",

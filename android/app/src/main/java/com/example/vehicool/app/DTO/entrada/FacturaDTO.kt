@@ -1,4 +1,4 @@
-package vehicool.backend.DTO
+package vehicool.backend.DTO.entrada
 
 // TODO FALTA LA FECHA
 data class FacturaDTO(

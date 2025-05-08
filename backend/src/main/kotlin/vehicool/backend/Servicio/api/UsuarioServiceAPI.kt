@@ -1,7 +1,7 @@
 package vehicool.backend.servicio.api
 
 import GenericServiceAPI
-import vehicool.backend.DTO.UsuarioDTO
+import vehicool.backend.DTO.salida.UsuarioDTO
 import vehicool.backend.entities.Usuario
 
 interface UsuarioServiceAPI : GenericServiceAPI<Usuario,Long>{

@@ -1,8 +1,5 @@
-package vehicool.backend.DTO
+package vehicool.backend.DTO.salida
 
-import jakarta.persistence.*
-import vehicool.backend.entities.Reparacion
-import vehicool.backend.entities.Usuario
 import java.time.LocalDate
 
 data class FacturaDTO(

@@ -5,7 +5,7 @@ import java.time.LocalDate
 @Entity
 data class Factura(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Long? = 0,
 
     val fecha: LocalDate = LocalDate.now(),
     val importeTotal: Double = 0.0,

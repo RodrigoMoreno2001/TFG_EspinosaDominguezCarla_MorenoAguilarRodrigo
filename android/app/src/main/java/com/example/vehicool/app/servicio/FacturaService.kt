@@ -1,22 +1,20 @@
 package com.example.vehicool.app.servicio
-
-import com.example.vehicool.app.entidades.Usuario
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import vehicool.backend.DTO.AutenticarDTO
-import vehicool.backend.DTO.UsuarioDTO
+import vehicool.backend.DTO.entrada.FacturaDTO
+import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
 
-interface UsuarioService {
+interface FacturaService {
 
-    @POST("api/usuarios/autenticar")
-    fun autenticar(@Body credenciales: AutenticarDTO): Call<UsuarioDTO>
+    @GET("api/factura/{id}")
+    fun getFactura(@Path("id") id: Long): Call<FacturaDTO>
 
-    @POST("api/usuarios/")
-    fun crearUsuario(@Body usuario: Usuario): Call<UsuarioDTO>
+    @GET("api/factura/usuario/{id}")
+    fun getFacturaPorIdUsuario(@Path("id") id: Long): Call<List<FacturaDTO>>
 
-    @GET("api/usuarios/{id}")
-    fun getUsuario(@Path("id") id: Long): Call<UsuarioDTO>
+    @POST("api/factura/")
+    fun crearFactura(@Body factura: FacturaOutputDTO): Call<FacturaDTO>
 }

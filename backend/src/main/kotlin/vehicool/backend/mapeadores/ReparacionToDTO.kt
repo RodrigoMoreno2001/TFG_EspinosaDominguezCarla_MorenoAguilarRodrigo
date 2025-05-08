@@ -1,6 +1,6 @@
 package vehicool.backend.mapeadores
 
-import vehicool.backend.DTO.ReparacionDTO
+import vehicool.backend.DTO.salida.ReparacionDTO
 import vehicool.backend.entities.Reparacion
 
 fun Reparacion.reparacionToDTO(): ReparacionDTO {
