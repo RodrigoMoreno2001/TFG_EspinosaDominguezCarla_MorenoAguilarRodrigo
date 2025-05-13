@@ -37,7 +37,6 @@
         android:contentDescription="Botón Vehículos" />
 </LinearLayout>
 
-    <!-- Fila 2: Reparaciones + botón con fondo blanco -->
 <LinearLayout
 android:layout_width="match_parent"
 android:layout_height="wrap_content"

@@ -4,13 +4,22 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     android:background="@color/fondo">
+
+    <TextView
+        android:id="@+id/NombreChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:background="@android:color/white"
+        android:padding="20dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="600dp"
         android:layout_weight="1"
         android:clipToPadding="false"
         android:padding="4dp" />
@@ -19,19 +28,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:background="@android:color/white">
+
 
         <EditText
             android:id="@+id/etMensaje"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:background="@android:color/white"
             android:layout_height="wrap_content"
             android:hint="Escribe un mensaje" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnEnviar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginRight="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            android:src="@drawable/enviar"
             android:text="Enviar" />
     </LinearLayout>
 

@@ -1,0 +1,101 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fondo">
+
+    <TextView
+        android:id="@+id/FacturaHacer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Añadir Servicio"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:background="@android:color/white"
+        android:padding="20dp"/>
+    <TextView
+        android:id="@+id/Servicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Servicio:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:padding="5dp"/>
+
+    <EditText
+        android:id="@+id/Serviciotxt"
+        android:layout_width="299dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="12dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:inputType="text"
+        android:padding="25dp"
+        android:text="" />
+    <TextView
+        android:id="@+id/Cantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Cantidad:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:padding="5dp"/>
+
+    <EditText
+        android:id="@+id/Cantidadtxt"
+        android:layout_width="142dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="12dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="25dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/PrecioUnidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Precio/Unidad:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:padding="5dp"/>
+
+    <EditText
+        android:id="@+id/PrecioUnidadtxt"
+        android:layout_width="142dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="12dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="25dp"
+        android:text="" />
+
+    <Button
+        android:id="@+id/AnadirVehiculobtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/azul"
+        android:text="Añadir Vehiculo" />
+    <Button
+        android:id="@+id/CompletarFactura"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/azul"
+        android:text="Completar Factura" />
+</LinearLayout>
