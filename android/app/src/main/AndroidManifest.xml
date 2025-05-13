@@ -19,12 +19,8 @@
             android:name=".app.vista.AppActivity"
             android:exported="false" />
         <activity
-            android:name=".app.vista.AppActivity"
-            android:exported="false" />
-        <activity
             android:name=".app.vista.Registro"
             android:exported="false" />
-        <activity android:name=".app.vista.ActivityInicio" />
         <activity
             android:name=".app.vista.Login"
             android:exported="true">

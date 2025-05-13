@@ -9,4 +9,5 @@ interface ReparacionServiceAPI : GenericServiceAPI<Reparacion,Long>{
     fun obtenerTodosDTO(): MutableList<ReparacionDTO>?
     fun obtenerPorIdDTO(id: Long): ReparacionDTO?
     fun crearReparacion(reparacionInputDTO: ReparacionInputDTO): ReparacionDTO?
+    fun obtenerPorIdUsuario(id: Long): List<ReparacionDTO>
 }

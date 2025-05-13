@@ -19,8 +19,8 @@ data class Usuario(
     val facturas: List<Factura> = emptyList(),
 
     @OneToMany(mappedBy = "emisor", cascade = [CascadeType.ALL])
-    val chatsEnviados: List<Chat> = emptyList(),
+    val chatsEnviados: List<MensajeChat> = emptyList(),
 
     @OneToMany(mappedBy = "receptor", cascade = [CascadeType.ALL])
-    val chatsRecibidos: List<Chat> = emptyList()
+    val chatsRecibidos: List<MensajeChat> = emptyList()
 )

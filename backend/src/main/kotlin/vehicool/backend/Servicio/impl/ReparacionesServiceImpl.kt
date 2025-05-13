@@ -55,4 +55,8 @@ class ReparacionesServiceImpl : GenericServiceImpl<Reparacion, Long>(), Reparaci
         return dao.save(reparacion).reparacionToDTO()
     }
 
+    override fun obtenerPorIdUsuario(id: Long): List<ReparacionDTO> {
+        return repositorioReparacion.findAllByVehiculo_Usuario_Id(id).map { it.reparacionToDTO() }
+    }
+
 }

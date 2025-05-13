@@ -10,7 +10,9 @@ data class Reparacion(
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fechaEntrada: LocalDate = LocalDate.now(),
+
     val estado: String = "",
+
     @Lob
     @Column(columnDefinition = "TEXT")
     val servicios: String = "",

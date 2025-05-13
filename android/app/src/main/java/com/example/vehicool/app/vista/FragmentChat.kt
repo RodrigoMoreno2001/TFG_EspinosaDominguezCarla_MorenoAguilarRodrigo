@@ -1,0 +1,107 @@
+package com.example.vehicool.app.vista
+
+
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.vehicool.R
+import com.example.vehicool.app.api.RetrofitClient
+import com.example.vehicool.app.vista.adaptadores.ChatAdapter
+import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import vehicool.backend.DTO.salida.ChatDto
+
+class FragmentChat : Fragment() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ChatAdapter
+    private val mensajes = mutableListOf<ChatDto>()
+    private lateinit var webSocket: WebSocket
+    private lateinit var editTextMensaje: EditText
+    private lateinit var botonEnviar: Button
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val vista = inflater.inflate(R.layout.fragment_chat, container, false)
+        editTextMensaje = vista.findViewById(R.id.etMensaje)
+        botonEnviar = vista.findViewById(R.id.btnEnviar)
+        recyclerView = vista.findViewById(R.id.chatRecyclerView)
+        adapter = ChatAdapter(mensajes)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val idreparacion = 2L
+        obtenerMensajes(idreparacion)
+        conectarWebSocket(idreparacion)
+
+        botonEnviar.setOnClickListener {
+            val mensajeTexto = editTextMensaje.text.toString()
+            if (mensajeTexto.isNotEmpty()) {
+                val mensaje = ChatDto(
+                    emisorId = 1,
+                    receptorId = 2,
+                    reparacionId = idreparacion,
+                    mensaje = mensajeTexto,
+                )
+                enviarMensaje(mensaje)
+                editTextMensaje.text.clear()
+            }
+        }
+
+        return vista
+    }
+
+    fun obtenerMensajes(id: Long){
+        RetrofitClient.chatService.getMensajes(id).enqueue(object : Callback<List<ChatDto>> {
+            override fun onResponse(call: Call<List<ChatDto>>, response: Response<List<ChatDto>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    mensajes.clear()
+                    mensajes.addAll(response.body()!!)
+                    recyclerView.scrollToPosition(mensajes.size - 1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ChatDto>>, t: Throwable) {
+                Log.e("LOGIN", "Error de conexión", t)
+            }
+        })
+    }
+
+    private fun conectarWebSocket(id: Long) {
+        val request = Request.Builder()
+            .url("ws://10.0.2.2:8080/ws/chat/$id")
+            .build()
+
+        val client = OkHttpClient()
+        webSocket = client.newWebSocket(request, object : WebSocketListener() {
+
+            override fun onMessage(webSocket: WebSocket, text: String) {
+                val mensaje = Gson().fromJson(text, ChatDto::class.java)
+                requireActivity().runOnUiThread {
+                    adapter.agregarMensaje(mensaje)
+                    recyclerView.scrollToPosition(adapter.itemCount - 1)
+                }
+            }
+        })
+    }
+
+    private fun enviarMensaje(mensaje: ChatDto) {
+        val jsonMensaje = Gson().toJson(mensaje)
+        webSocket.send(jsonMensaje)
+        editTextMensaje.text.clear()
+    }
+}

@@ -1,6 +1,6 @@
-package com.example.vehicool.app.entidades
+package com.example.vehicool.app.DTO.salida
 
-data class Usuario(
+data class UsuarioOutputDTO(
     val nombre: String = "",
     val correo: String = "",
     val contrasena: String = "",

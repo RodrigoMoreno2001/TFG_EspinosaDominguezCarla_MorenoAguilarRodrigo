@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import vehicool.backend.DTO.salida.ReparacionDTO
 import vehicool.backend.DTO.entrada.ReparacionInputDTO
+import vehicool.backend.DTO.salida.FacturaDTO
+import vehicool.backend.entities.Reparacion
 import vehicool.backend.repositorio.RepositorioFactura
 import vehicool.backend.repositorio.RepositorioReparacion
 import vehicool.backend.repositorio.RepositorioVehiculo
@@ -16,12 +18,6 @@ class ControladorReparacion(private val repositorioReparacion: RepositorioRepara
     @Autowired
     lateinit var reparacionServiceAPI: ReparacionServiceAPI
 
-    @Autowired
-    lateinit var vehiculoRepo: RepositorioVehiculo
-
-    @Autowired
-    lateinit var facturaRepo: RepositorioFactura
-
     @GetMapping("/todos")
     fun getAll(): MutableList<ReparacionDTO>? {
         return reparacionServiceAPI.obtenerTodosDTO()
@@ -31,9 +27,13 @@ class ControladorReparacion(private val repositorioReparacion: RepositorioRepara
         return reparacionServiceAPI.obtenerPorIdDTO(id)
     }
 
+    @GetMapping("/usuario/{id}")
+    fun getPorUsuario(@PathVariable id: Long):  List<ReparacionDTO> {
+        return reparacionServiceAPI.obtenerPorIdUsuario(id)
+    }
+
     @PostMapping("/")
     fun crearReparacion(@RequestBody dto: ReparacionInputDTO): ResponseEntity<ReparacionDTO?> {
-
         val creada = reparacionServiceAPI.crearReparacion(dto)
         return ResponseEntity.ok(creada)
     }

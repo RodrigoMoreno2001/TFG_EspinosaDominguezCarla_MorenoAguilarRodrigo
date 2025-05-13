@@ -17,8 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.vehicool.app.DTO.salida.AutenticarDTO
-import vehicool.backend.DTO.entrada.FacturaDTO
-import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
+import com.example.vehicool.app.utils.SessionManager
 import vehicool.backend.DTO.entrada.UsuarioDTO
 
 class Login : AppCompatActivity() {
@@ -41,30 +40,6 @@ class Login : AppCompatActivity() {
         registro.setOnClickListener {
             val intent = Intent(this@Login, Registro::class.java)
             startActivity(intent)
-
-            val factura = FacturaOutputDTO(
-                6,
-                "2025-01-05",
-                130.0,
-                2,
-                1
-            )
-
-            RetrofitClient.facturaService.crearFactura(factura).enqueue(object : Callback<FacturaDTO> {
-                override fun onResponse(call: Call<FacturaDTO>, response: Response<FacturaDTO>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val factura = response.body()
-                        Log.e("LOGIN", "TE TENGO: $factura")
-                    } else {
-                        Toast.makeText(this@Login, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<FacturaDTO>, t: Throwable) {
-                    Log.e("LOGIN", "Error de conexión", t)
-                    Toast.makeText(this@Login, "Error al conectar a la API", Toast.LENGTH_SHORT).show()
-                }
-            })
         }
 
         accederBtn.setOnClickListener {
@@ -80,6 +55,8 @@ class Login : AppCompatActivity() {
                 override fun onResponse(call: Call<UsuarioDTO>, response: Response<UsuarioDTO>) {
                     if (response.isSuccessful && response.body() != null) {
                         val usuario = response.body()
+                        val session = SessionManager(this@Login)
+                        session.persistirUsuario(usuario?.id ?: -1, usuario?.nombre ?: "")
                         Toast.makeText(this@Login, "Bienvenido ${usuario?.nombre}", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@Login, AppActivity::class.java)
                         startActivity(intent)

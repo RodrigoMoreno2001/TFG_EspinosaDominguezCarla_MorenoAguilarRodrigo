@@ -42,7 +42,7 @@
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:layout_marginRight="40dp"
-            android:background="@drawable/Citas"
+            android:background="@drawable/citas"
             android:contentDescription="citas" />
 
         <ImageButton
@@ -55,11 +55,11 @@
             android:contentDescription="home" />
 
         <ImageButton
-            android:id="@+id/botonLogin"
+            android:id="@+id/botonperfil"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
-            android:background="@drawable/login"
-            android:contentDescription="login" />
+            android:background="@drawable/perfil"
+            android:contentDescription="perfil" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

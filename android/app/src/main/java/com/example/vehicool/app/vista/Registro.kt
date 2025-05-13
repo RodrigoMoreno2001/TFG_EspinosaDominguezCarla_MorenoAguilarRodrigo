@@ -11,9 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.vehicool.R
-import com.example.vehicool.app.entidades.Usuario
+import com.example.vehicool.app.DTO.salida.UsuarioOutputDTO
 import com.example.vehicool.app.api.RetrofitClient
-import com.example.vehicool.app.vista.Login
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,13 +44,13 @@ class Registro : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val usuario = Usuario(
+            val usuarioOutputDTO = UsuarioOutputDTO(
                 nombre = nombre.text.toString(),
                 correo = correo.text.toString(),
                 contrasena = contrasena.text.toString()
             )
 
-            RetrofitClient.usuarioService.crearUsuario(usuario)
+            RetrofitClient.usuarioService.crearUsuario(usuarioOutputDTO)
                 .enqueue(object : Callback<UsuarioDTO> {
                     override fun onResponse(call: Call<UsuarioDTO>, response: Response<UsuarioDTO>) {
                         if (response.isSuccessful) {

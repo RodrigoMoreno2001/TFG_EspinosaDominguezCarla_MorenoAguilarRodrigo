@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import vehicool.backend.DTO.entrada.VehiculoInputDTO
 import vehicool.backend.DTO.salida.VehiculoDTO
 import vehicool.backend.entities.Vehiculo
 import vehicool.backend.repositorio.RepositorioVehiculo
@@ -25,8 +26,8 @@ class ControladorVehiculo(private val repositorioVehiculo: RepositorioVehiculo) 
     }
 
     @PostMapping("/")
-    fun crearVehiculo(@RequestBody vehiculo: Vehiculo): ResponseEntity<VehiculoDTO> {
-        var dto = vehiculoServiceAPI.crearCoche(vehiculo)
+    fun crearVehiculo(@RequestBody dto: VehiculoInputDTO): ResponseEntity<VehiculoDTO> {
+        var dto = vehiculoServiceAPI.crearCoche(dto)
         return ResponseEntity<VehiculoDTO>(dto, HttpStatus.OK)
     }
 
