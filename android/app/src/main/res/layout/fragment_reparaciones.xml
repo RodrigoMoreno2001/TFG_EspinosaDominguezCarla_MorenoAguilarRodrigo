@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -16,65 +17,27 @@
         android:background="@android:color/white"
         android:padding="20dp"/>
 
-    <LinearLayout
+    <com.skydoves.expandablelayout.ExpandableLayout
+        android:id="@+id/reparacionesActivas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        app:expandable_spinner_color="@color/black"
+        app:expandable_animation="overshoot"
+        app:expandable_duration="500"
+        app:expandable_isExpanded="false"
+        app:expandable_parentLayout="@layout/reparaciones_en_curso"
+        app:expandable_secondLayout="@layout/reparaciones_exp" />
+
+    <com.skydoves.expandablelayout.ExpandableLayout
+        android:id="@+id/reparacionesFinalizadas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:paddingStart="20dp"
-        android:gravity="center_vertical"
-        android:background="@android:color/white"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/ReparacionesCurso"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reparaciones en curso"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/btnVehiculos"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:scaleType="fitCenter"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/flecha"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Botón Curso" />
-    </LinearLayout>
-
-    <!-- Fila 2: Reparaciones + botón con fondo blanco -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="190dp"
-        android:paddingStart="20dp"
-        android:gravity="center_vertical"
-        android:background="@android:color/white"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/ReparacionesFinalizadas"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reparaciones Finalizadas"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/btnReparaciones"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/flecha"
-            android:layout_marginRight="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Botón Finalizadas" />
-    </LinearLayout>
+        app:expandable_spinner_color="@color/black"
+        app:expandable_animation="overshoot"
+        app:expandable_duration="500"
+        app:expandable_isExpanded="false"
+        app:expandable_parentLayout="@layout/reparaciones_finalizadas"
+        app:expandable_secondLayout="@layout/reparaciones_exp" />
 
 </LinearLayout>

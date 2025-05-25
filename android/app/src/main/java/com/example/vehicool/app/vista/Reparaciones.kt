@@ -5,56 +5,102 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
+import com.example.vehicool.app.api.RetrofitClient
+import com.example.vehicool.app.utils.SessionManager
+import com.example.vehicool.app.vista.adaptadores.ReparacionesAdapter
+import com.skydoves.expandablelayout.ExpandableLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import vehicool.backend.DTO.entrada.ReparacionDTO
+import vehicool.backend.DTO.entrada.VehiculoDTO
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Reparaciones.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Reparaciones : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private val reparacionesActivas = mutableListOf<ReparacionDTO>()
+    private val reparacionesFinalizadas = mutableListOf<ReparacionDTO>()
+    private val adapterActivas = ReparacionesAdapter(reparacionesActivas) { reparacion ->
+        verDetalles(reparacion)
+    }
+    private val adapterFinalizadas = ReparacionesAdapter(reparacionesFinalizadas) { reparacion ->
+        verDetalles(reparacion)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reparaciones, container, false)
+        val vista = inflater.inflate(R.layout.fragment_reparaciones, container, false)
+
+        val reparacionesActivas = vista.findViewById<ExpandableLayout>(R.id.reparacionesActivas)
+        val reparacionesFinalizadas = vista.findViewById<ExpandableLayout>(R.id.reparacionesFinalizadas)
+
+        val recyclerActivas = reparacionesActivas.secondLayout.findViewById<RecyclerView>(R.id.rv_reparaciones)
+        val recyclerFinalizadas = reparacionesFinalizadas.secondLayout.findViewById<RecyclerView>(R.id.rv_reparaciones)
+
+        recyclerActivas.layoutManager = LinearLayoutManager(requireContext())
+        recyclerActivas.adapter = adapterActivas
+        recyclerFinalizadas.layoutManager = LinearLayoutManager(requireContext())
+        recyclerFinalizadas.adapter = adapterFinalizadas
+
+        reparacionesActivas.setOnClickListener {
+            if(reparacionesActivas.isExpanded) reparacionesActivas.collapse()
+            else reparacionesActivas.expand()
+        }
+        reparacionesFinalizadas.setOnClickListener {
+            if(reparacionesFinalizadas.isExpanded) reparacionesFinalizadas.collapse()
+            else reparacionesFinalizadas.expand()
+        }
+
+        obtenerReparaciones()
+
+        return vista
+    }
+    private fun verDetalles(reparacionDTO: ReparacionDTO){
+        val fragment = DetallesReparacion()
+
+        val bundle = Bundle().apply {
+            putParcelable("reparacion", reparacionDTO)
+        }
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Reparaciones.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Reparaciones().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun obtenerReparaciones(){
+        val id = SessionManager(requireContext()).getId()
+
+        RetrofitClient.reparacionService.getPorUsuario(id)
+            .enqueue(object : Callback<List<ReparacionDTO>> {
+                override fun onResponse(call: Call<List<ReparacionDTO>>, response: Response<List<ReparacionDTO>>) {
+                    if (response.isSuccessful) {
+                        reparacionesActivas.clear()
+                        reparacionesFinalizadas.clear()
+                        response.body()?.let {
+                            reparacionesActivas.addAll(it.filter { it.estado != "Cancelado" && it.estado != "Completado" })
+                            reparacionesFinalizadas.addAll(it.filter { it.estado == "Cancelado" || it.estado == "Completado" })
+                        }
+                        adapterActivas.notifyDataSetChanged()
+                    } else {
+                        Toast.makeText(requireContext(), "Error al acceder a los vehiculos", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+
+                override fun onFailure(call: Call<List<ReparacionDTO>>, t: Throwable) {
+                    Toast.makeText(requireContext(), "Error al conectar con la API", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
+
 }

@@ -1,9 +1,16 @@
 package vehicool.backend.DTO.entrada
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
+
+@Parcelize
 data class ReparacionDTO(
-    val fechaEntrada: String,
+    val id: Long? = null,
+    val fechaEntrada: LocalDate = LocalDate.now(),
     val estado: String = "",
-    val servicios: String = "",
-    val vehiculo: Long,
+    var servicios: String? = null,
+    val motivos: String,
+    val vehiculo: VehiculoDTO,
     val factura: Long?
-)
+): Parcelable

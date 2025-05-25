@@ -8,6 +8,7 @@ fun Usuario.usuarioToDTO(): UsuarioDTO {
         id = this.id,
         nombre = this.nombre,
         correo = this.correo,
+        privilegios = this.privilegios,
         vehiculos = this.vehiculos.map { it.id }.toMutableList()
     )
 }

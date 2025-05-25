@@ -22,15 +22,14 @@
         android:text="Servicio:"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:padding="5dp"/>
 
     <EditText
         android:id="@+id/Serviciotxt"
         android:layout_width="299dp"
         android:layout_height="45dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="30dp"
         android:background="@android:color/white"
         android:ems="10"
         android:inputType="text"
@@ -44,15 +43,14 @@
         android:text="Cantidad:"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:padding="5dp"/>
 
     <EditText
         android:id="@+id/Cantidadtxt"
         android:layout_width="142dp"
         android:layout_height="36dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="30dp"
         android:background="@android:color/white"
         android:ems="10"
         android:inputType="number"
@@ -67,15 +65,14 @@
         android:text="Precio/Unidad:"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:padding="5dp"/>
 
     <EditText
         android:id="@+id/PrecioUnidadtxt"
         android:layout_width="142dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="30dp"
         android:background="@android:color/white"
         android:ems="10"
         android:inputType="number"
@@ -83,18 +80,24 @@
         android:text="" />
 
     <Button
-        android:id="@+id/AnadirVehiculobtn"
+        android:id="@+id/AnadirServiciobtn"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/azul"
-        android:text="Añadir Vehiculo" />
+        android:text="Añadir Servicio" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
     <Button
         android:id="@+id/CompletarFactura"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/azul"
         android:text="Completar Factura" />

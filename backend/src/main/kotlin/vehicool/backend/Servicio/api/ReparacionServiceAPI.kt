@@ -1,6 +1,7 @@
 package vehicool.backend.servicio.api
 
 import GenericServiceAPI
+import org.springframework.data.repository.query.Param
 import vehicool.backend.DTO.salida.ReparacionDTO
 import vehicool.backend.DTO.entrada.ReparacionInputDTO
 import vehicool.backend.entities.Reparacion

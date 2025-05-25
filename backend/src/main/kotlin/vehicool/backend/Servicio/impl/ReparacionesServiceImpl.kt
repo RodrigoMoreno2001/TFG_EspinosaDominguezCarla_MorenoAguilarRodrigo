@@ -46,8 +46,10 @@ class ReparacionesServiceImpl : GenericServiceImpl<Reparacion, Long>(), Reparaci
 
         val reparacion = Reparacion(
             id = dto.id,
+            fechaEntrada = dto.fechaEntrada,
             estado = dto.estado,
             servicios = dto.servicios,
+            motivos = dto.motivos,
             vehiculo = vehiculo,
             factura = factura
         )
@@ -58,5 +60,6 @@ class ReparacionesServiceImpl : GenericServiceImpl<Reparacion, Long>(), Reparaci
     override fun obtenerPorIdUsuario(id: Long): List<ReparacionDTO> {
         return repositorioReparacion.findAllByVehiculo_Usuario_Id(id).map { it.reparacionToDTO() }
     }
+
 
 }

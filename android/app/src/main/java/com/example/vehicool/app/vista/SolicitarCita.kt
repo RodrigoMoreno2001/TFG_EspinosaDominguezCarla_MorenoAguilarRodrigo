@@ -1,60 +1,101 @@
 package com.example.vehicool.app.vista
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import com.example.vehicool.R
+import com.example.vehicool.app.DTO.salida.ReparacionOutputDTO
+import com.example.vehicool.app.api.RetrofitClient
+import com.google.android.material.button.MaterialButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import vehicool.backend.DTO.entrada.ReparacionDTO
+import vehicool.backend.DTO.entrada.VehiculoDTO
+import java.time.LocalDate
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SolicitarCita.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SolicitarCita : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var vehiculo: VehiculoDTO? = null
+    private var fecha: LocalDate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        vehiculo = arguments?.getParcelable("vehiculo")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_solicitar_cita, container, false)
-    }
+        val vista=inflater.inflate(R.layout.fragment_solicitar_cita, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SolicitarCita.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SolicitarCita().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        val modelo= vista.findViewById<TextView>(R.id.modelo)
+        val matricula= vista.findViewById<TextView>(R.id.matricula)
+        val motivos= vista.findViewById<EditText>(R.id.motivos)
+        val fechatxt= vista.findViewById<TextView>(R.id.fecha)
+        val seleccionarFecha = vista.findViewById<MaterialButton>(R.id.seleccionarFecha)
+        val anadirVehiculobtn = vista.findViewById<MaterialButton>(R.id.AnadirVehiculobtn)
+
+        modelo.text=vehiculo?.modelo.toString()
+        matricula.text=vehiculo?.matricula.toString()
+
+
+        val setterFecha = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            fecha = LocalDate.of(year, month + 1, dayOfMonth)
+            fechatxt.text = "Fecha: $fecha"
+        }
+
+        seleccionarFecha.setOnClickListener {
+            val hoy = LocalDate.now()
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                setterFecha,
+                hoy.year,
+                hoy.monthValue - 1,
+                hoy.dayOfMonth
+            )
+            datePickerDialog.show()
+        }
+        anadirVehiculobtn.setOnClickListener {
+
+            crearReparacion(motivos.text.toString())
+        }
+        return vista
+    }
+    private fun crearReparacion(motivos: String) {
+        if(fecha==null ){
+            Toast.makeText(requireContext(), "Selecciona una fecha válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val nuevaReparacion = ReparacionOutputDTO(
+            fechaEntrada = fecha!!,
+            estado = "En proceso",
+            servicios ="",
+            motivos = motivos,
+            vehiculoId = vehiculo!!.id!!,
+        )
+
+        RetrofitClient.reparacionService.crearReparacion(nuevaReparacion).enqueue(object : Callback<ReparacionDTO> {
+            override fun onResponse(call: Call<ReparacionDTO>, response: Response<ReparacionDTO>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Toast.makeText(requireContext(), "Solicitud procesada con éxito", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Hubo un error en la solicitud", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            override fun onFailure(call: Call<ReparacionDTO>, t: Throwable) {
+                Log.e("LOGIN", "Error de conexión", t)
+                Toast.makeText(requireContext(), "Error al conectar a la API", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

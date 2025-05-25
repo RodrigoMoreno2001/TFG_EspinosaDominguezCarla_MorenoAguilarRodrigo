@@ -17,8 +17,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.vehicool.app.DTO.salida.AutenticarDTO
+import com.example.vehicool.app.DTO.salida.ReparacionOutputDTO
 import com.example.vehicool.app.utils.SessionManager
+import vehicool.backend.DTO.entrada.ReparacionDTO
 import vehicool.backend.DTO.entrada.UsuarioDTO
+import java.time.LocalDate
 
 class Login : AppCompatActivity() {
 
@@ -38,8 +41,29 @@ class Login : AppCompatActivity() {
         val registro = findViewById<TextView>(R.id.Registro)
 
         registro.setOnClickListener {
-            val intent = Intent(this@Login, Registro::class.java)
-            startActivity(intent)
+            val aa=ReparacionOutputDTO(
+                fechaEntrada = LocalDate.now(),
+                estado = "estado",
+                servicios="servicios",
+                motivos="motivos",
+                vehiculoId = 1,
+            )
+            RetrofitClient.reparacionService.crearReparacion(aa).enqueue(object : Callback<ReparacionDTO> {
+                override fun onResponse(call: Call<ReparacionDTO>, response: Response<ReparacionDTO>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        Log.e("LOGIN", "${response.body()}")
+                    } else {
+                        Toast.makeText(this@Login, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ReparacionDTO>, t: Throwable) {
+                    Log.e("LOGIN", "Error de conexión", t)
+                    Toast.makeText(this@Login, "Error al conectar a la API", Toast.LENGTH_SHORT).show()
+                }
+            })
+            //val intent = Intent(this@Login, Registro::class.java)
+            //startActivity(intent)
         }
 
         accederBtn.setOnClickListener {
@@ -54,10 +78,13 @@ class Login : AppCompatActivity() {
             RetrofitClient.usuarioService.autenticar(dto).enqueue(object : Callback<UsuarioDTO> {
                 override fun onResponse(call: Call<UsuarioDTO>, response: Response<UsuarioDTO>) {
                     if (response.isSuccessful && response.body() != null) {
+
                         val usuario = response.body()
                         val session = SessionManager(this@Login)
-                        session.persistirUsuario(usuario?.id ?: -1, usuario?.nombre ?: "")
+
+                        session.persistirUsuario(usuario?.id ?: -1, usuario?.nombre ?: "", usuario?.privilegios ?: "", usuario?.correo ?: "")
                         Toast.makeText(this@Login, "Bienvenido ${usuario?.nombre}", Toast.LENGTH_SHORT).show()
+
                         val intent = Intent(this@Login, AppActivity::class.java)
                         startActivity(intent)
                     } else {

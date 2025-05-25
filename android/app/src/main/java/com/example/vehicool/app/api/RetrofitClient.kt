@@ -1,6 +1,7 @@
 package com.example.vehicool.app.api
 import com.example.vehicool.app.servicio.ChatService
 import com.example.vehicool.app.servicio.FacturaService
+import com.example.vehicool.app.servicio.ReparacionService
 import com.example.vehicool.app.servicio.UsuarioService
 import com.example.vehicool.app.servicio.VehiculoService
 import retrofit2.Retrofit
@@ -8,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -15,40 +17,22 @@ object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2:8080/"
 
     val gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, JsonSerializer<LocalDateTime> { src, _, _ ->
-            JsonPrimitive(src.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
-        })
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
         .create()
-    
-    val usuarioService: UsuarioService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(UsuarioService::class.java)
-    }
 
-    val facturaService: FacturaService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(FacturaService::class.java)
-    }
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
 
-    val vehiculoService: VehiculoService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(VehiculoService::class.java)
-    }
+    val usuarioService: UsuarioService by lazy { retrofit.create(UsuarioService::class.java) }
 
-    val chatService: ChatService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(ChatService::class.java)
-    }
+    val facturaService: FacturaService by lazy { retrofit.create(FacturaService::class.java) }
+
+    val reparacionService: ReparacionService by lazy { retrofit.create(ReparacionService::class.java) }
+
+    val vehiculoService: VehiculoService by lazy { retrofit.create(VehiculoService::class.java) }
+
+    val chatService: ChatService by lazy { retrofit.create(ChatService::class.java) }
 }

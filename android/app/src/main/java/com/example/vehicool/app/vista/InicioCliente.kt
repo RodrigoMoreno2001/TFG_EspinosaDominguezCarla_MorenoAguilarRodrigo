@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,19 @@ import vehicool.backend.DTO.entrada.VehiculoDTO
 class InicioCliente : Fragment() {
 
     private val vehiculos = mutableListOf<VehiculoDTO>()
-    private val adapter = VehiculoAdapter(vehiculos)
+    private val adapter = VehiculoAdapter(vehiculos){ vehiculo ->
+        val fragment = SolicitarCita()
+
+        val bundle = Bundle().apply {
+            putParcelable("vehiculo", vehiculo)
+        }
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +48,8 @@ class InicioCliente : Fragment() {
         val nombreText = vista.findViewById<TextView>(R.id.nombreCliente)
         val btnVehiculos = vista.findViewById<ImageButton>(R.id.btnVehiculos)
         val vehiculosRV = vista.findViewById<RecyclerView>(R.id.vehiculosRV)
+        val misReparaciones = vista.findViewById<LinearLayout>(R.id.mis_reparaciones)
+
         vehiculosRV.layoutManager = LinearLayoutManager(context)
 
         vehiculosRV.adapter = adapter
@@ -48,9 +63,19 @@ class InicioCliente : Fragment() {
                 .commit()
         }
         obtenerVehiculos()
+
+        misReparaciones.setOnClickListener {
+            cambiarFragment(Reparaciones())
+        }
+
         return vista
     }
-
+    private fun cambiarFragment(fragment : Fragment){
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
     private fun obtenerVehiculos(){
 
         val id = SessionManager(requireContext()).getId()

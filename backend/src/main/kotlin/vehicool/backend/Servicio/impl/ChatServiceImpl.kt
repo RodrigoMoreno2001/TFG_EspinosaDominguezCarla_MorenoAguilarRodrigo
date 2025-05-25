@@ -42,7 +42,7 @@ class ChatServiceImpl(
 
         val receptor = repositorioUsuario.findById(chatDto.receptorId)
             .orElseThrow { IllegalArgumentException("Receptor no encontrado") }
-
+        println(chatDto.reparacionId)
         val reparacion = repositorioReparacion.findById(chatDto.reparacionId)
             .orElseThrow { IllegalArgumentException("Reparación no encontrada") }
 

@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
 import vehicool.backend.DTO.entrada.VehiculoDTO
 
-class VehiculoAdapter(private val listaVehiculos: List<VehiculoDTO>) :
-    RecyclerView.Adapter<VehiculoAdapter.VehiculoViewHolder>() {
+class VehiculoAdapter(
+    private val listaVehiculos: List<VehiculoDTO>,
+    private val onItemClick: (VehiculoDTO) -> Unit
+    ) : RecyclerView.Adapter<VehiculoAdapter.VehiculoViewHolder>() {
 
     class VehiculoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val modeloText: TextView = itemView.findViewById(R.id.modelo)
@@ -26,6 +28,10 @@ class VehiculoAdapter(private val listaVehiculos: List<VehiculoDTO>) :
         val vehiculo = listaVehiculos[position]
         holder.modeloText.text = vehiculo.modelo
         holder.matriculaText.text = vehiculo.matricula
+
+        holder.itemView.setOnClickListener {
+            onItemClick(vehiculo)
+        }
     }
 
     override fun getItemCount(): Int = listaVehiculos.size

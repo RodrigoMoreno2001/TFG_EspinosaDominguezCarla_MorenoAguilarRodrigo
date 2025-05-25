@@ -1,60 +1,89 @@
 package com.example.vehicool.app.vista
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
+import com.example.vehicool.app.api.RetrofitClient
+import com.example.vehicool.app.utils.SessionManager
+import com.example.vehicool.app.vista.adaptadores.ReparacionesAdapter
+import com.example.vehicool.app.vista.adaptadores.ReparacionesMecanicoAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import vehicool.backend.DTO.entrada.ReparacionDTO
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MecanicoInicio.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MecanicoInicio : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private val reparacionesActivas = mutableListOf<ReparacionDTO>()
+    private val adapter = ReparacionesMecanicoAdapter(
+        reparacionesActivas,
+        onVerMasClick = { reparacion ->
+            verDetalles(reparacion)
+        },
+        cambiarEstado = { reparacion ->
+            Log.d("ADAPTER", "Mostrando reparación:: ${reparacion.id}")
+        }
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mecanico_inicio, container, false)
+        val vista = inflater.inflate(R.layout.fragment_mecanico_inicio, container, false)
+
+        vista.findViewById<TextView>(R.id.nombreCliente).text = SessionManager(requireContext()).getNombre()
+
+        val reparacionesRV = vista.findViewById<RecyclerView>(R.id.reparacionesRV)
+        reparacionesRV.layoutManager= LinearLayoutManager(requireContext())
+        reparacionesRV.adapter = adapter
+        obtenerReparaciones()
+        return vista
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MecanicoInicio.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MecanicoInicio().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun verDetalles(reparacionDTO: ReparacionDTO){
+        val fragment = FragmentDetallesReparacionesMecanico()
+
+        val bundle = Bundle().apply {
+            putParcelable("reparacion", reparacionDTO)
+        }
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun obtenerReparaciones(){
+
+        RetrofitClient.reparacionService.getReparaciones()
+            .enqueue(object : Callback<List<ReparacionDTO>> {
+                override fun onResponse(call: Call<List<ReparacionDTO>>, response: Response<List<ReparacionDTO>>) {
+                    if (response.isSuccessful) {
+                        reparacionesActivas.clear()
+                        response.body()?.let {
+                            reparacionesActivas.addAll(it.filter { it.estado != "Cancelado" && it.estado != "Completado" })
+                        }
+                        adapter.notifyDataSetChanged()
+                    } else {
+                        Toast.makeText(requireContext(), "Error al acceder", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+
+                override fun onFailure(call: Call<List<ReparacionDTO>>, t: Throwable) {
+                    Toast.makeText(requireContext(), "Error al conectar con la API", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

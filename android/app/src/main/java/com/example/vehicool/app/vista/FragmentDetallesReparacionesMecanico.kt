@@ -10,10 +10,9 @@ import android.widget.TextView
 import com.example.vehicool.R
 import com.example.vehicool.app.utils.SessionManager
 import vehicool.backend.DTO.entrada.ReparacionDTO
-import vehicool.backend.DTO.entrada.VehiculoDTO
-import java.time.LocalDate
 
-class DetallesReparacion : Fragment() {
+class FragmentDetallesReparacionesMecanico : Fragment() {
+
     private var reparacion: ReparacionDTO? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +24,7 @@ class DetallesReparacion : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val vista = inflater.inflate(R.layout.fragment_detalles_reparacion, container, false)
+        val vista = inflater.inflate(R.layout.fragment_detalles_reparaciones_mecanico, container, false)
 
         val nombre = vista.findViewById<TextView>(R.id.nombre)
         val matricula = vista.findViewById<TextView>(R.id.matricula)
@@ -33,6 +32,7 @@ class DetallesReparacion : Fragment() {
         val fecha = vista.findViewById<TextView>(R.id.fecha)
         val motivos = vista.findViewById<TextView>(R.id.motivos)
         val abrirChat = vista.findViewById<Button>(R.id.abrirChat)
+        val anadirServicio = vista.findViewById<Button>(R.id.anadirServicio)
 
         nombre.text= SessionManager(requireContext()).getNombre()
         matricula.text=reparacion?.vehiculo?.matricula
@@ -43,9 +43,22 @@ class DetallesReparacion : Fragment() {
         abrirChat.setOnClickListener {
             verChat(reparacion?.id!!)
         }
+        anadirServicio.setOnClickListener {
+            val fragment = HacerFactura()
+            val bundle = Bundle().apply {
+                putParcelable("reparacion", reparacion)
+            }
+            fragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
 
         return vista
     }
+
     private fun verChat(reparacionId: Long){
         val fragment = FragmentChat()
 

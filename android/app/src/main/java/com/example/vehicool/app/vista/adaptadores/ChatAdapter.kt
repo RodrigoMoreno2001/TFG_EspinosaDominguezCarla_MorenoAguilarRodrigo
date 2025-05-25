@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
 import vehicool.backend.DTO.salida.ChatDto
 
-class ChatAdapter(private val messages: MutableList<ChatDto>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChatAdapter(private val messages: MutableList<ChatDto>,private val emisorId:Long) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_SENT = 1
@@ -41,8 +41,8 @@ class ChatAdapter(private val messages: MutableList<ChatDto>) : RecyclerView.Ada
 
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
-        // cmabiar
-        return if (message.emisorId == 1L) {
+
+        return if (message.emisorId == emisorId) {
             VIEW_TYPE_SENT
         } else {
             VIEW_TYPE_RECEIVED

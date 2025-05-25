@@ -7,12 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
 import com.example.vehicool.app.api.RetrofitClient
+import com.example.vehicool.app.utils.SessionManager
 import com.example.vehicool.app.vista.adaptadores.ChatAdapter
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -29,32 +30,39 @@ class FragmentChat : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ChatAdapter
     private val mensajes = mutableListOf<ChatDto>()
+    private var reparacionId: Long? = null
     private lateinit var webSocket: WebSocket
     private lateinit var editTextMensaje: EditText
-    private lateinit var botonEnviar: Button
+    private lateinit var botonEnviar: ImageButton
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        reparacionId = arguments?.getLong("reparacionId")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val vista = inflater.inflate(R.layout.fragment_chat, container, false)
+        val emisorId = SessionManager(requireContext()).getId()
         editTextMensaje = vista.findViewById(R.id.etMensaje)
         botonEnviar = vista.findViewById(R.id.btnEnviar)
         recyclerView = vista.findViewById(R.id.chatRecyclerView)
-        adapter = ChatAdapter(mensajes)
+        adapter = ChatAdapter(mensajes, SessionManager(requireContext()).getId())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val idreparacion = 2L
-        obtenerMensajes(idreparacion)
-        conectarWebSocket(idreparacion)
+        Log.i("eeeeeeeeeeeee","$reparacionId")
+        obtenerMensajes(reparacionId!!)
+        conectarWebSocket(reparacionId!!)
 
         botonEnviar.setOnClickListener {
             val mensajeTexto = editTextMensaje.text.toString()
             if (mensajeTexto.isNotEmpty()) {
                 val mensaje = ChatDto(
-                    emisorId = 1,
+                    emisorId = emisorId,
                     receptorId = 2,
-                    reparacionId = idreparacion,
+                    reparacionId = reparacionId!!,
                     mensaje = mensajeTexto,
                 )
                 enviarMensaje(mensaje)

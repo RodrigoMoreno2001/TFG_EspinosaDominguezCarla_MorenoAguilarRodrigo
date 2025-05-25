@@ -15,7 +15,9 @@ data class Reparacion(
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    val servicios: String = "",
+    val servicios: String? = null,
+
+    val motivos: String,
 
     @ManyToOne
     @JoinColumn(name = "vehiculo_id")
