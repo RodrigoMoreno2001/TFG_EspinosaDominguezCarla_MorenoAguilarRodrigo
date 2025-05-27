@@ -14,6 +14,11 @@ import vehicool.backend.repositorio.RepositorioReparacion
 import vehicool.backend.repositorio.RepositorioUsuario
 import vehicool.backend.servicio.api.FacturaServiceAPI
 
+/**
+ * Servicio de facturas. Siempre trabajamos con DTOs para exponer los datos,
+ * y recibimos InputDTOs para crearlos.
+ */
+
 @Service
 class FacturaServiceImpl : GenericServiceImpl<Factura, Long>(), FacturaServiceAPI {
 

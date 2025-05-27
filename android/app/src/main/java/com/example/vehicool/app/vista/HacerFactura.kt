@@ -32,6 +32,7 @@ class HacerFactura : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // recupera la reparacion
         reparacion = arguments?.getParcelable("reparacion")
     }
 
@@ -63,6 +64,9 @@ class HacerFactura : Fragment() {
             crearFactura(reparacion)
         }
 
+        // Cargar servicios actuales de la reparación
+        // y aplica un filtro para tolerancia a fallos
+
         listaServicios = reparacion?.servicios?.removeSuffix(";")?.split(";")?.filter { it.isNotBlank() && it.count { c -> c == ':' } == 2 }!!.toMutableList()
 
         serviciosAdapter = ServiciosAdapter(listaServicios,{posicion -> eliminarServicio(posicion)})
@@ -71,7 +75,7 @@ class HacerFactura : Fragment() {
 
         return vista
     }
-
+    // Añade un servicio (formato: nombre:precio:cantidad) y actualiza la reparación en el backend
     private fun anadirServicio(servicio: String, cantidad: String,precio: String) {
 
         val nuevoServicio = "$servicio:$precio:$cantidad;"
@@ -127,6 +131,9 @@ class HacerFactura : Fragment() {
         })
     }
 
+    // Sabiendo el formato de los servicios, se crea una factura obteniendo los datos
+    // necesarios para su creación y enviando un OUtputDTO con Retrofit
+
     private fun crearFactura(reparacion: ReparacionDTO) {
 
         val total = reparacion.servicios?.split(";")?.mapNotNull { servicio ->
@@ -150,6 +157,7 @@ class HacerFactura : Fragment() {
             override fun onResponse(call: Call<FacturaDTO>, response: Response<FacturaDTO>) {
                 if (response.isSuccessful && response.body() != null) {
                     val idFactura = response.body()?.id
+                    // Marca la reparación como 'Pago pendiente' al asociarla con la factura
                     val reparacionCompletada = ReparacionOutputDTO(
                         id = reparacion.id,
                         fechaEntrada = reparacion.fechaEntrada,

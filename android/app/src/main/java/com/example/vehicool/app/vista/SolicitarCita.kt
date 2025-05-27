@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 class SolicitarCita : Fragment() {
     private var vehiculo: VehiculoDTO? = null
-    private var fecha: LocalDate? = null
+    private var fecha: LocalDate? = LocalDate.now()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +43,20 @@ class SolicitarCita : Fragment() {
         val seleccionarFecha = vista.findViewById<MaterialButton>(R.id.seleccionarFecha)
         val anadirVehiculobtn = vista.findViewById<MaterialButton>(R.id.AnadirVehiculobtn)
 
-        modelo.text=vehiculo?.modelo.toString()
-        matricula.text=vehiculo?.matricula.toString()
+        modelo.text = vehiculo?.modelo.toString()
+        matricula.text = vehiculo?.matricula.toString()
 
-
+        // Listener para cuando se selecciona una fecha en el DatePicker
         val setterFecha = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            // Creamos un LocalDate con la fecha seleccionada (month + 1 porque en DatePicker enero es 0)
             fecha = LocalDate.of(year, month + 1, dayOfMonth)
             fechatxt.text = "Fecha: $fecha"
         }
 
+        // Botón para mostrar el selector de fecha
         seleccionarFecha.setOnClickListener {
             val hoy = LocalDate.now()
+            // Creamos un DatePickerDialog con la fecha actual como fecha inicial
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 setterFecha,
@@ -61,10 +64,10 @@ class SolicitarCita : Fragment() {
                 hoy.monthValue - 1,
                 hoy.dayOfMonth
             )
-            datePickerDialog.show()
+            datePickerDialog.show()  // Mostramos el modal para seleccionar la fecha
         }
-        anadirVehiculobtn.setOnClickListener {
 
+        anadirVehiculobtn.setOnClickListener {
             crearReparacion(motivos.text.toString())
         }
         return vista

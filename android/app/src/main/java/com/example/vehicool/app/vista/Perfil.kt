@@ -14,11 +14,6 @@ import com.example.vehicool.app.utils.SessionManager
 
 class Perfil : Fragment() {
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,9 +23,13 @@ class Perfil : Fragment() {
         val correo = vista.findViewById<TextView>(R.id.correoCliente)
         val nombre = vista.findViewById<TextView>(R.id.nombreCliente)
         val cerrarSesion = vista.findViewById<Button>(R.id.CerrarSesion)
+
+        // se obtienen los datos del usuario logueado
         val session = SessionManager(requireContext())
         correo.text = session.getCorreo()
         nombre.text = session.getNombre()
+
+        // boton para cerrar sesión
 
         cerrarSesion.setOnClickListener {
             session.limpiarSession()

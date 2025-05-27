@@ -7,13 +7,15 @@ import vehicool.backend.DTO.entrada.FacturaInputDTO
 import vehicool.backend.repositorio.RepositorioFactura
 import vehicool.backend.servicio.api.FacturaServiceAPI
 
+// Esta clase está definida como controlador Rest con url ("/api/factura")
 @RestController
 @RequestMapping("/api/factura")
 class ControladorFactura(private val repositorioFactura: RepositorioFactura) {
 
+    // inyectar servicio
+
     @Autowired
     lateinit var facturaServiceAPI: FacturaServiceAPI
-
 
     @GetMapping("/todos")
     fun getAll(): MutableList<FacturaDTO>? {

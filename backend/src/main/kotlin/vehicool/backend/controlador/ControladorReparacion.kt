@@ -11,9 +11,13 @@ import vehicool.backend.repositorio.RepositorioReparacion
 import vehicool.backend.repositorio.RepositorioVehiculo
 import vehicool.backend.servicio.api.ReparacionServiceAPI
 
+// Esta clase está definida como controlador Rest con url ("/api/reparacion")
+
 @RestController
 @RequestMapping("/api/reparacion")
 class ControladorReparacion(private val repositorioReparacion: RepositorioReparacion) {
+
+    // inyectar servicio
 
     @Autowired
     lateinit var reparacionServiceAPI: ReparacionServiceAPI

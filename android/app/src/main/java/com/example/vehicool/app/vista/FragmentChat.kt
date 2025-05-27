@@ -37,6 +37,7 @@ class FragmentChat : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // recupera el id de la reparacion (cada reparacion tiene su chat)
         reparacionId = arguments?.getLong("reparacionId")
     }
 
@@ -44,7 +45,9 @@ class FragmentChat : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val vista = inflater.inflate(R.layout.fragment_chat, container, false)
+
         val emisorId = SessionManager(requireContext()).getId()
         editTextMensaje = vista.findViewById(R.id.etMensaje)
         botonEnviar = vista.findViewById(R.id.btnEnviar)
@@ -52,6 +55,9 @@ class FragmentChat : Fragment() {
         adapter = ChatAdapter(mensajes, SessionManager(requireContext()).getId())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Se recuperan mensajes antiguos y se establece la conexión WebSocket
+
         obtenerMensajes(reparacionId!!)
         conectarWebSocket(reparacionId!!)
 
@@ -60,7 +66,7 @@ class FragmentChat : Fragment() {
             if (mensajeTexto.isNotEmpty()) {
                 val mensaje = ChatDto(
                     emisorId = emisorId,
-                    receptorId = 3,
+                    receptorId = 1, // este id siempre va ser el mecanico
                     reparacionId = reparacionId!!,
                     mensaje = mensajeTexto,
                 )
@@ -71,7 +77,7 @@ class FragmentChat : Fragment() {
 
         return vista
     }
-
+    // Obtiene el historial de mensajes desde el servidor usando Retrofit
     fun obtenerMensajes(id: Long){
         RetrofitClient.chatService.getMensajes(id).enqueue(object : Callback<List<ChatDto>> {
             override fun onResponse(call: Call<List<ChatDto>>, response: Response<List<ChatDto>>) {
@@ -87,7 +93,7 @@ class FragmentChat : Fragment() {
             }
         })
     }
-
+    // Establece una conexión WebSocket con el servidor para recibir mensajes en tiempo real
     private fun conectarWebSocket(id: Long) {
         val request = Request.Builder()
             .url("ws://10.0.2.2:8080/ws/chat/$id")
@@ -95,7 +101,7 @@ class FragmentChat : Fragment() {
 
         val client = OkHttpClient()
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
-
+            // esta parte se ejecuta cuando se recibe un mensaje de un cliente externo
             override fun onMessage(webSocket: WebSocket, text: String) {
                 val mensaje = Gson().fromJson(text, ChatDto::class.java)
                 requireActivity().runOnUiThread {

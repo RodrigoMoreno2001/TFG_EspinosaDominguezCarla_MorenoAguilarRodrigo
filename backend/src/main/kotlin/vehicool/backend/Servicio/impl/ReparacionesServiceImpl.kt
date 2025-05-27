@@ -12,7 +12,9 @@ import vehicool.backend.mapeadores.reparacionToDTO
 import vehicool.backend.repositorio.RepositorioFactura
 import vehicool.backend.repositorio.RepositorioReparacion
 import vehicool.backend.repositorio.RepositorioVehiculo
-
+/**
+ * Servicio de reparaciones. Siempre devolvemos DTOs y recibimos InputDTOs del cliente.
+ */
 @Service
 class ReparacionesServiceImpl : GenericServiceImpl<Reparacion, Long>(), ReparacionServiceAPI {
     @Autowired

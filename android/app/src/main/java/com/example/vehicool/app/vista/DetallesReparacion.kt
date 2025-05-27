@@ -18,6 +18,7 @@ class DetallesReparacion : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // recupera el objeto Reparacion enviado por argumentos
         reparacion = arguments?.getParcelable("reparacion")
     }
 

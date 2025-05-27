@@ -25,8 +25,8 @@ class InicioCliente : Fragment() {
 
     private val vehiculos = mutableListOf<VehiculoDTO>()
     private val adapter = VehiculoAdapter(vehiculos){ vehiculo ->
+        // cada vehiculo tendrá un listener y abrirá el fragment "SolicitarCita()"
         val fragment = SolicitarCita()
-
         val bundle = Bundle().apply {
             putParcelable("vehiculo", vehiculo)
         }
@@ -56,13 +56,11 @@ class InicioCliente : Fragment() {
 
         nombreText.text = "Hola, $nombre"
 
-        btnVehiculos.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, AnadirVehiculo())
-                .addToBackStack(null)
-                .commit()
-        }
         obtenerVehiculos()
+
+        btnVehiculos.setOnClickListener {
+            cambiarFragment(AnadirVehiculo())
+        }
 
         misReparaciones.setOnClickListener {
             cambiarFragment(Reparaciones())

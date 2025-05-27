@@ -14,6 +14,10 @@ import vehicool.backend.repositorio.RepositorioUsuario
 import vehicool.backend.repositorio.RepositorioVehiculo
 import vehicool.backend.servicio.api.VehiculoServiceAPI
 
+/**
+ * Servicio de vehiculo. Siempre devolvemos DTOs y recibimos InputDTOs del cliente.
+ */
+
 @Service
 class VehiculoServiceImpl : GenericServiceImpl<Vehiculo, Long>(), VehiculoServiceAPI {
 

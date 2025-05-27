@@ -21,12 +21,12 @@ import vehicool.backend.DTO.entrada.FacturaDTO
 import vehicool.backend.DTO.entrada.ReparacionDTO
 
 class ConfirmarPago : Fragment() {
-
     private var reparacion: ReparacionDTO? = null
     private lateinit var servicioAdapter: ServicioFacturaAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // recupera el objeto Reparacion enviado por argumentos
         reparacion = arguments?.getParcelable("reparacion")
     }
 
@@ -39,7 +39,12 @@ class ConfirmarPago : Fragment() {
         val precio = vista.findViewById<TextView>(R.id.precio)
         val pagarBtn = vista.findViewById<TextView>(R.id.pagar)
         val recyclerServicios = vista.findViewById<RecyclerView>(R.id.recyclerServicios)
-        servicioAdapter = ServicioFacturaAdapter(reparacion?.servicios!!.split(";").filter { it.isNotBlank() })
+
+        // los servicios vienen separados con este formato "[servicio];[servicio]"
+        // por lo tanto, los divido en un split y aplico un filtro por si hay fallos de formato
+
+        servicioAdapter = ServicioFacturaAdapter(reparacion?.servicios!!.split(";")
+                            .filter { it.isNotBlank() })
 
         recyclerServicios.layoutManager = LinearLayoutManager(requireContext())
         recyclerServicios.adapter = servicioAdapter
@@ -76,7 +81,7 @@ class ConfirmarPago : Fragment() {
         }
         return vista
     }
-
+    // Este metodo hace una peticion a la api para obtener el precio total de la factura
     private fun obtenerPrecio(precio: TextView) {
         RetrofitClient.facturaService.getFactura(reparacion?.factura!!)
             .enqueue(object : Callback<FacturaDTO> {

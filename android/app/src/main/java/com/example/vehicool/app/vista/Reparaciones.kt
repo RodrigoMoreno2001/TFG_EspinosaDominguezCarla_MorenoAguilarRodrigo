@@ -24,11 +24,16 @@ class Reparaciones : Fragment() {
 
     private val reparacionesActivas = mutableListOf<ReparacionDTO>()
     private val reparacionesFinalizadas = mutableListOf<ReparacionDTO>()
+
+    // Si la reparación está pendiente de pago, llama a pagar(), si no, verDetalles()
+
     private val adapterActivas = ReparacionesAdapter(reparacionesActivas) { reparacion ->
         if(reparacion.estado=="Pago pendiente") pagar(reparacion)
             else verDetalles(reparacion)
     }
+
     private val adapterFinalizadas = ReparacionesAdapter(reparacionesFinalizadas) { reparacion ->
+        // Para reparaciones finalizadas, muestra la factura
         verFactura(reparacion)
     }
 
@@ -42,8 +47,12 @@ class Reparaciones : Fragment() {
     ): View? {
         val vista = inflater.inflate(R.layout.fragment_reparaciones, container, false)
 
+        // Obtener los ExpandableLayout que agrupan las reparaciones activas y finalizadas
+
         val reparacionesActivas = vista.findViewById<ExpandableLayout>(R.id.reparacionesActivas)
         val reparacionesFinalizadas = vista.findViewById<ExpandableLayout>(R.id.reparacionesFinalizadas)
+
+        // Dentro de cada ExpandableLayout hay un RecyclerView para listar las reparaciones
 
         val recyclerActivas = reparacionesActivas.secondLayout.findViewById<RecyclerView>(R.id.rv_reparaciones)
         val recyclerFinalizadas = reparacionesFinalizadas.secondLayout.findViewById<RecyclerView>(R.id.rv_reparaciones)

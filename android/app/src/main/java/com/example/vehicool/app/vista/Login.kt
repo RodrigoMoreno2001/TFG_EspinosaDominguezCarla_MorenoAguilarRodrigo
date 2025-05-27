@@ -24,10 +24,11 @@ class Login : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // Si el usuario está logueado, salta directamente a la pantalla de inicio
         if(SessionManager(this@Login).isUsuarioLogueado()){
             val intent = Intent(this@Login, AppActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         enableEdgeToEdge()
@@ -59,11 +60,18 @@ class Login : AppCompatActivity() {
             inicioSesion(dto)
         }
     }
-
+    // Función para validar formato del correo por expresiones regulares
     fun validarCorreo(correo: String): Boolean {
         val regex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
         return regex.matches(correo)
     }
+
+    /**
+     * Función para autenticar al usuario con el backend.
+     * Recibe un AutenticarDTO con correo y contraseña.
+     * En caso de éxito, guarda la sesión y abre la pantalla principal.
+     */
+
     fun inicioSesion(dto: AutenticarDTO) {
         RetrofitClient.usuarioService.autenticar(dto).enqueue(object : Callback<UsuarioDTO> {
             override fun onResponse(call: Call<UsuarioDTO>, response: Response<UsuarioDTO>) {
@@ -88,6 +96,5 @@ class Login : AppCompatActivity() {
             }
         })
     }
-
 
 }

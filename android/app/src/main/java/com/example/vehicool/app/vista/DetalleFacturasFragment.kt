@@ -46,9 +46,14 @@ class DetalleFacturasFragment : Fragment() {
         val nombre = vista.findViewById<TextView>(R.id.nombre)
         val precioTotal = vista.findViewById<TextView>(R.id.precioTotal)
         nombre.text= SessionManager(requireContext()).getNombre()
+
+        // Llamada para obtener y mostrar los datos de la factura desde la API
+
         datosFactura(precioTotal, fechaFactura)
         return vista
     }
+
+    // Funcion que realiza la petición a la API para obtener los detalles de la factura asociada
 
     private fun datosFactura(precioTotal: TextView, fechaFactura: TextView) {
         RetrofitClient.facturaService.getFactura(reparacion?.factura!!)

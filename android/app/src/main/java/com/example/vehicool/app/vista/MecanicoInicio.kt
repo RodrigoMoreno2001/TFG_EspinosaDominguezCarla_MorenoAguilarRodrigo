@@ -33,9 +33,6 @@ class MecanicoInicio : Fragment() {
             seleccionarEstado(reparacion)
         }
     )
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +63,8 @@ class MecanicoInicio : Fragment() {
             .commit()
     }
 
+    // Modal para seleccionar el nuevo estado de la reparación
+
     private fun seleccionarEstado(reparacion: ReparacionDTO) {
         val opciones = arrayOf("En proceso", "Pago pendiente", "Cancelado", "Completado")
 
@@ -73,12 +72,14 @@ class MecanicoInicio : Fragment() {
         builder.setTitle("Estado de la reparacion:")
             .setItems(opciones) { _, which ->
                 val seleccion = opciones[which]
-                reparacion.estado=seleccion
-                actualizarReparacion(reparacion)
+                reparacion.estado = seleccion  // Actualizar estado localmente
+                actualizarReparacion(reparacion)  // Enviar cambio al backend
             }
             .create()
             .show()
     }
+
+    // Obtener la lista de reparaciones del backend y filtrar solo las activas
 
     private fun obtenerReparaciones(){
 
@@ -126,6 +127,7 @@ class MecanicoInicio : Fragment() {
                 Toast.makeText(requireContext(), "Error al conectar a la API", Toast.LENGTH_SHORT).show()
             }
         })
+
         val index = reparacionesActivas.indexOfFirst { it.id == reparacion.id }
         if (index != -1) {
             reparacionesActivas[index] = reparacion

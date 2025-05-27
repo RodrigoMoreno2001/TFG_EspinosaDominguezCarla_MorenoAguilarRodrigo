@@ -34,6 +34,8 @@ class FragmentDetallesReparacionesMecanico : Fragment() {
         val abrirChat = vista.findViewById<Button>(R.id.abrirChat)
         val anadirServicio = vista.findViewById<Button>(R.id.anadirServicio)
 
+        // recupera el nombre del usuario persistente
+
         nombre.text= SessionManager(requireContext()).getNombre()
         matricula.text=reparacion?.vehiculo?.matricula
         modelo.text=reparacion?.vehiculo?.modelo

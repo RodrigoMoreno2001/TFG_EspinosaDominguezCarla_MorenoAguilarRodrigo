@@ -11,9 +11,11 @@ import vehicool.backend.controlador.ControladorChat
 class WebSocketConfig(
     private val controladoraChat: ControladorChat
 ) : WebSocketConfigurer {
-
+    
+    // se registra el handler en la ruta "/ws/chat/{roomId}", roomId es el identificador del chat
+    
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
         registry.addHandler(controladoraChat, "/ws/chat/{roomId}")
-            .setAllowedOrigins("*")
+            .setAllowedOrigins("*") // esto permite conexiones de cualquier origen (es peligroso)
     }
 }

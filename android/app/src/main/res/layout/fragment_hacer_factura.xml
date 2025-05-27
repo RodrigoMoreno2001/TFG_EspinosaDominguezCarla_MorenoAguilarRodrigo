@@ -18,7 +18,7 @@
         android:id="@+id/Servicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:text="Servicio:"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -29,17 +29,17 @@
         android:id="@+id/Serviciotxt"
         android:layout_width="299dp"
         android:layout_height="45dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:paddingStart="5dp"
         android:background="@android:color/white"
-        android:ems="10"
         android:inputType="text"
-        android:padding="25dp"
+        android:hint="Cambio de aceite"
         android:text="" />
     <TextView
         android:id="@+id/Cantidad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:text="Cantidad:"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -52,9 +52,9 @@
         android:layout_height="36dp"
         android:layout_marginLeft="30dp"
         android:background="@android:color/white"
-        android:ems="10"
         android:inputType="number"
-        android:padding="25dp"
+        android:paddingStart="5dp"
+        android:hint="1"
         android:text="" />
 
     <TextView
@@ -74,9 +74,9 @@
         android:layout_height="40dp"
         android:layout_marginLeft="30dp"
         android:background="@android:color/white"
-        android:ems="10"
         android:inputType="number"
-        android:padding="25dp"
+        android:paddingStart="5dp"
+        android:hint="1"
         android:text="" />
 
     <Button

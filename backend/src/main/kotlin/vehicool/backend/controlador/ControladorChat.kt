@@ -13,11 +13,14 @@ class ControladorChat(
 
     private val objectMapper: ObjectMapper = ObjectMapper().registerModule(JavaTimeModule())
 
+    // Mapa que asocia cada ID de reparación (roomId) con las sesiones WebSocket conectadas a esa sala
+
     private val sessionsByRepairId = mutableMapOf<String, MutableSet<WebSocketSession>>()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val repairId = session.uri?.path?.substringAfterLast("/")
         if (repairId != null) {
+            // Añadimos la sesión al conjunto de sesiones de esa reparación
             sessionsByRepairId.computeIfAbsent(repairId) { mutableSetOf() }.add(session)
         }
     }
@@ -34,7 +37,7 @@ class ControladorChat(
         }
 
         chatService.guardarMensaje(chatDto)
-
+        // Enviamos el mensaje a todas las sesiones abiertas de esa reparación (broadcast)
         sessionsByRepairId[repairId]?.forEach { s ->
             if (s.isOpen) {
                 val chatDtoJson = objectMapper.writeValueAsString(chatDto)
@@ -49,6 +52,7 @@ class ControladorChat(
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
+        // se elimina la sesion al desconectarse el usuario
         val repairId = session.uri?.path?.substringAfterLast("/")
         sessionsByRepairId[repairId]?.remove(session)
     }

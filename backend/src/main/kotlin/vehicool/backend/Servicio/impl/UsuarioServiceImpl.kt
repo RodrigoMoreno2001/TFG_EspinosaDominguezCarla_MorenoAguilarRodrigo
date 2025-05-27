@@ -10,6 +10,10 @@ import vehicool.backend.entities.Usuario
 import vehicool.backend.mapeadores.usuarioToDTO
 import vehicool.backend.repositorio.RepositorioUsuario
 
+/**
+ * Servicio de  usuario. Siempre devolvemos DTOs y recibimos InputDTOs del cliente.
+ */
+
 @Service
 class UsuarioServiceImpl : GenericServiceImpl<Usuario, Long>(), UsuarioServiceAPI {
     @Autowired

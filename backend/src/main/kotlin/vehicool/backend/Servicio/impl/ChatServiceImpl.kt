@@ -3,14 +3,17 @@ package vehicool.backend.servicio.impl
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
 import vehicool.backend.DTO.salida.ChatDto
-import vehicool.backend.entities.Factura
 import vehicool.backend.entities.MensajeChat
 import vehicool.backend.genericas.GenericServiceImpl
 import vehicool.backend.repositorio.RepositorioChat
 import vehicool.backend.repositorio.RepositorioReparacion
 import vehicool.backend.repositorio.RepositorioUsuario
 import vehicool.backend.servicio.api.ChatServiceAPI
-import java.time.LocalDateTime
+
+/**
+ * Servicio del chat. Siempre trabajamos con DTOs para enviar/recibir datos,
+ * nunca con entidades directamente en los controladores.
+ */
 
 @Service
 class ChatServiceImpl(

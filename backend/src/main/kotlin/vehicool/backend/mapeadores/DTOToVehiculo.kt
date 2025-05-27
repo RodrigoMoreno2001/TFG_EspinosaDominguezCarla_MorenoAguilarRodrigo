@@ -1,7 +1,6 @@
 package vehicool.backend.mapeadores
 
 import vehicool.backend.DTO.entrada.VehiculoInputDTO
-import vehicool.backend.entities.Reparacion
 import vehicool.backend.entities.Usuario
 import vehicool.backend.entities.Vehiculo
 

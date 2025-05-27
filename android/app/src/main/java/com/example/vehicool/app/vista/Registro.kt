@@ -39,7 +39,7 @@ class Registro : AppCompatActivity() {
 
         registrarse.setOnClickListener {
 
-            if(contrasena.equals(repetirContrasena)){
+            if(contrasena.text.toString() != repetirContrasena.text.toString()){
                 Toast.makeText(this@Registro, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -54,18 +54,14 @@ class Registro : AppCompatActivity() {
                 .enqueue(object : Callback<UsuarioDTO> {
                     override fun onResponse(call: Call<UsuarioDTO>, response: Response<UsuarioDTO>) {
                         if (response.isSuccessful) {
-                            val usuarioCreado = response.body()
                             Toast.makeText(this@Registro, "Usuario creado", Toast.LENGTH_SHORT).show()
-                            Log.d("API", "Usuario creado: $usuarioCreado")
                         } else {
                             Toast.makeText(this@Registro, "Error al crear usuario", Toast.LENGTH_SHORT).show()
-                            Log.e("API", "Error al crear usuario: ${response.code()}")
                         }
                     }
 
                     override fun onFailure(call: Call<UsuarioDTO>, t: Throwable) {
                         Toast.makeText(this@Registro, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                        Log.e("API", "Error en red: ${t.message}")
                     }
                 })
             finish()
