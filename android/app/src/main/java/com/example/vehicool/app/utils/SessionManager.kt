@@ -3,10 +3,15 @@ package com.example.vehicool.app.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-
+/**
+ * Clase para gestionar la sesión del usuario mediante SharedPreferences.
+ * Permite guardar, recuperar y limpiar datos básicos del usuario de forma persistente.
+ */
 class SessionManager(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences("session_usuario", Context.MODE_PRIVATE)
+
+    // Constantes para guardar y recuperar datos del usuario en SharedPreferences.
 
     companion object {
         private const val ID_USUARIO = "usuario_id"
@@ -14,6 +19,8 @@ class SessionManager(context: Context) {
         private const val PRIVILEGIOS_USUARIO = "usuario_privilegios"
         private const val CORREO_USUARIO = "usuario_correo"
     }
+
+    // Guarda los datos del usuario en SharedPreferences.
 
     fun persistirUsuario(userId: Long, userName: String, privilegios: String, correo: String) {
         prefs.edit().apply {
@@ -33,7 +40,15 @@ class SessionManager(context: Context) {
 
     fun getCorreo(): String? = prefs.getString(CORREO_USUARIO, null)
 
+    // Elimina los datos persistidos
+
     fun limpiarSession() {
-        prefs.edit() { clear() }
+        prefs.edit { clear() }
+    }
+
+    // Verificar si hay un usuario logueado
+
+    fun isUsuarioLogueado(): Boolean {
+        return getId() != -1L && getCorreo() != null
     }
 }

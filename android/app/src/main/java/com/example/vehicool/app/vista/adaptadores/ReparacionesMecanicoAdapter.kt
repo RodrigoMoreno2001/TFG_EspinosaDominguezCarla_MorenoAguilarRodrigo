@@ -10,12 +10,24 @@ import androidx.recyclerview.widget.RecyclerView
 import vehicool.backend.DTO.entrada.ReparacionDTO
 import com.example.vehicool.R
 
+/**
+ * Adaptador para mostrar una lista de reparaciones en el RecyclerView
+ *
+ * @param reparaciones Lista de reparaciones a mostrar
+ * @param onVerMasClick Función para ver detalles
+ * @param cambiarEstado Función para cambiar estado de reparación
+ */
 
 class ReparacionesMecanicoAdapter(
     private val reparaciones: List<ReparacionDTO>,
     private val onVerMasClick: (ReparacionDTO) -> Unit,
     private val cambiarEstado: (ReparacionDTO) -> Unit
 ) : RecyclerView.Adapter<ReparacionesMecanicoAdapter.ReparacionViewHolder>() {
+
+    /**
+     * ViewHolder que representa una tarjeta de reparación individual en la lista.
+     * Contiene referencias a los elementos de la UI del layout `cv_reparacion_mecanico`.
+     */
 
     inner class ReparacionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val matricula: TextView = itemView.findViewById(R.id.matricula)

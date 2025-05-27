@@ -68,6 +68,7 @@ class Registro : AppCompatActivity() {
                         Log.e("API", "Error en red: ${t.message}")
                     }
                 })
+            finish()
         }
     }
 }

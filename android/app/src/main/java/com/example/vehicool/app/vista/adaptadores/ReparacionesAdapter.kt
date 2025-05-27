@@ -9,6 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import vehicool.backend.DTO.entrada.ReparacionDTO
 import com.example.vehicool.R
 
+/**
+ * Adaptador para mostrar una lista de reparaciones en un RecyclerView.
+ *
+ * @param reparaciones Lista de reparaciones que se mostrarán en el RecyclerView.
+ * @param onVerMasClick Función que se ejecutará al pulsar el botón
+ *                      Este botón puede mostrar "Ver más", "Ver factura" o "Pagar", según el estado.
+ */
 
 class ReparacionesAdapter(
     private val reparaciones: List<ReparacionDTO>,
@@ -36,7 +43,11 @@ class ReparacionesAdapter(
         holder.modelo.text = reparacion.vehiculo.modelo
         holder.fecha.text = reparacion.fechaEntrada.toString()
         holder.estado.text = reparacion.estado
+
+        // Personaliza el texto del botón según el estado.
+
         if(reparacion.estado=="Completado") holder.boton.text="Ver factura"
+        if(reparacion.estado=="Pago pendiente") holder.boton.text="Pagar"
 
         holder.boton.setOnClickListener {
             onVerMasClick(reparacion)

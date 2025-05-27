@@ -8,6 +8,9 @@ import vehicool.backend.DTO.entrada.FacturaDTO
 import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
 import com.example.vehicool.app.DTO.salida.ReparacionOutputDTO
 import vehicool.backend.DTO.entrada.ReparacionDTO
+/**
+ * Servicio Retrofit para operaciones relacionadas con reparaciones
+ */
 
 interface ReparacionService {
 

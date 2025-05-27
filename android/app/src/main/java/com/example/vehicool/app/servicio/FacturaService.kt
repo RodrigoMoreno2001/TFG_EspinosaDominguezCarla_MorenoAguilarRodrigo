@@ -7,6 +7,10 @@ import retrofit2.http.Path
 import vehicool.backend.DTO.entrada.FacturaDTO
 import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
 
+/**
+ * Servicio Retrofit para operaciones relacionadas con facturas.
+ */
+
 interface FacturaService {
 
     @GET("api/factura/{id}")

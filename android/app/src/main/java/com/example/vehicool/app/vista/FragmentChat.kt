@@ -52,7 +52,6 @@ class FragmentChat : Fragment() {
         adapter = ChatAdapter(mensajes, SessionManager(requireContext()).getId())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        Log.i("eeeeeeeeeeeee","$reparacionId")
         obtenerMensajes(reparacionId!!)
         conectarWebSocket(reparacionId!!)
 
@@ -61,7 +60,7 @@ class FragmentChat : Fragment() {
             if (mensajeTexto.isNotEmpty()) {
                 val mensaje = ChatDto(
                     emisorId = emisorId,
-                    receptorId = 2,
+                    receptorId = 3,
                     reparacionId = reparacionId!!,
                     mensaje = mensajeTexto,
                 )

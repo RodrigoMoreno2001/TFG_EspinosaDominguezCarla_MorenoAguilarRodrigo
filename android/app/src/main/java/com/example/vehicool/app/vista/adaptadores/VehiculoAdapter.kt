@@ -8,6 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
 import vehicool.backend.DTO.entrada.VehiculoDTO
 
+/**
+ * Adaptador para mostrar una lista de vehículos en un RecyclerView.
+ *
+ * @param listaVehiculos Lista de vehículos que se mostrarán en la interfaz.
+ * @param onItemClick Función que se ejecuta al pulsar sobre un vehículo.
+ */
+
 class VehiculoAdapter(
     private val listaVehiculos: List<VehiculoDTO>,
     private val onItemClick: (VehiculoDTO) -> Unit

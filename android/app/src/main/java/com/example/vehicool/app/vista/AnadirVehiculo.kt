@@ -21,10 +21,6 @@ import vehicool.backend.DTO.entrada.VehiculoDTO
 
 class AnadirVehiculo : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,18 +34,36 @@ class AnadirVehiculo : Fragment() {
         val anadirVehiculoBtn = vista.findViewById<Button>(R.id.AnadirVehiculobtn)
 
         anadirVehiculoBtn.setOnClickListener {
-            val idUsuario = SessionManager(requireContext()).getId()
+
+            val modelo = modeloEditText.text.toString().trim()
+            val matricula = matriculaEditText.text.toString().trim()
+            val anyoStr = anoEditText.text.toString().trim()
+            // evita que los campos estén vacíos
+            if (modelo.isEmpty() || matricula.isEmpty() || anyoStr.isEmpty()) {
+                Toast.makeText(requireContext(), "Por favor rellena todos los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val idUsuario = SessionManager(requireContext()).getId() // se recoge el id del usuario autenticado
+
+            // construye un objeto OutputDTO, utilizado para enviar datos al backend
+
             val nuevoVehiculo = VehiculoOutputDTO(
-                matricula = matriculaEditText.text.toString(),
-                modelo = modeloEditText.text.toString(),
-                anyo = Integer.parseInt(anoEditText.text.toString()),
-                usuarioId = idUsuario)
+                matricula = matricula,
+                modelo = modelo,
+                anyo = anyoStr.toInt(),
+                usuarioId = idUsuario
+            )
+
+            // envía datos al backend para persistir un vehiculo en BBDD através de la API
+
+            // Se podría usar coroutines para una mejor estructura, pero se ha optado por callbacks para una implementación más simple.
 
             RetrofitClient.vehiculoService.crearVehiculo(nuevoVehiculo)
                 .enqueue(object : Callback<VehiculoDTO> {
                     override fun onResponse(call: Call<VehiculoDTO>, response: Response<VehiculoDTO>) {
                         if (response.isSuccessful) {
-                            Toast.makeText(requireContext(), "Usuario creado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Vehiculo creado", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(requireContext(), "Error al crear el vehiculo", Toast.LENGTH_SHORT).show()
                         }
@@ -57,7 +71,6 @@ class AnadirVehiculo : Fragment() {
 
                     override fun onFailure(call: Call<VehiculoDTO>, t: Throwable) {
                         Toast.makeText(requireContext(), "Error al conectar con la API", Toast.LENGTH_SHORT).show()
-                        Log.i("eeeeeeeee","EL ERROR", t)
                     }
                 })
         }

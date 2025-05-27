@@ -8,7 +8,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import com.example.vehicool.app.DTO.salida.AutenticarDTO
 import vehicool.backend.DTO.entrada.UsuarioDTO
-
+/**
+ * Servicio Retrofit para operaciones relacionadas con usuarios
+ */
 interface UsuarioService {
 
     @POST("api/usuarios/autenticar")

@@ -11,6 +11,7 @@ interface RepositorioUsuario : CrudRepository<Usuario, Long>{
     @Query("SELECT u FROM Usuario u WHERE u.correo = :correo AND u.contrasena = :contrasena")
 
     fun autenticar(@Param("correo") correo: String, @Param("contrasena") contrasena: String): Usuario?
+    fun existsByCorreo(correo: String): Boolean
 }
 
 

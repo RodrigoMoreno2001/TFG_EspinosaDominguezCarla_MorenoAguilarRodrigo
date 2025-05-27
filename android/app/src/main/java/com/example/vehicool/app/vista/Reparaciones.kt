@@ -1,6 +1,7 @@
 package com.example.vehicool.app.vista
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,10 +25,11 @@ class Reparaciones : Fragment() {
     private val reparacionesActivas = mutableListOf<ReparacionDTO>()
     private val reparacionesFinalizadas = mutableListOf<ReparacionDTO>()
     private val adapterActivas = ReparacionesAdapter(reparacionesActivas) { reparacion ->
-        verDetalles(reparacion)
+        if(reparacion.estado=="Pago pendiente") pagar(reparacion)
+            else verDetalles(reparacion)
     }
     private val adapterFinalizadas = ReparacionesAdapter(reparacionesFinalizadas) { reparacion ->
-        verDetalles(reparacion)
+        verFactura(reparacion)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +80,20 @@ class Reparaciones : Fragment() {
             .commit()
     }
 
+    private fun verFactura(reparacionDTO: ReparacionDTO){
+        val fragment = DetalleFacturasFragment()
+
+        val bundle = Bundle().apply {
+            putParcelable("reparacion", reparacionDTO)
+        }
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun obtenerReparaciones(){
         val id = SessionManager(requireContext()).getId()
 
@@ -102,5 +118,17 @@ class Reparaciones : Fragment() {
                 }
             })
     }
+    private fun pagar(reparacionDTO: ReparacionDTO){
+        val fragment = ConfirmarPago()
 
+        val bundle = Bundle().apply {
+            putParcelable("reparacion", reparacionDTO)
+        }
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 }

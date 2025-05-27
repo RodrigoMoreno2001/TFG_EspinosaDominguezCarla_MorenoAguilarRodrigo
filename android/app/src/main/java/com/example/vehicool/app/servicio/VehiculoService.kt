@@ -8,7 +8,9 @@ import vehicool.backend.DTO.entrada.FacturaDTO
 import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
 import com.example.vehicool.app.DTO.salida.VehiculoOutputDTO
 import vehicool.backend.DTO.entrada.VehiculoDTO
-
+/**
+ * Servicio Retrofit para operaciones relacionadas con vehiculos
+ */
 interface VehiculoService {
 
     @GET("api/vehiculos/{id}")

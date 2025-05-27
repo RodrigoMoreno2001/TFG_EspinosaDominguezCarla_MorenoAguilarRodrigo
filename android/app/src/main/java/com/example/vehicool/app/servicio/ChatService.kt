@@ -5,8 +5,11 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import vehicool.backend.DTO.salida.ChatDto
 
-interface ChatService {
+/**
+ * Servicio Retrofit para manejar las operaciones relacionadas con el chat.
+ */
 
+interface ChatService {
     @GET("api/chat/{id}")
     fun getMensajes(@Path("id") id: Long): Call<List<ChatDto>>
 }

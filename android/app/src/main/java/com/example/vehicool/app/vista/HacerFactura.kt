@@ -7,21 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
+import com.example.vehicool.app.DTO.salida.FacturaOutputDTO
 import com.example.vehicool.app.DTO.salida.ReparacionOutputDTO
 import com.example.vehicool.app.api.RetrofitClient
 import com.example.vehicool.app.utils.SessionManager
 import com.example.vehicool.app.vista.adaptadores.ServiciosAdapter
-import okhttp3.WebSocket
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import vehicool.backend.DTO.entrada.FacturaDTO
 import vehicool.backend.DTO.entrada.ReparacionDTO
+import java.time.LocalDate
 
 class HacerFactura : Fragment() {
 
@@ -55,6 +56,11 @@ class HacerFactura : Fragment() {
             serviciotxt.text.clear()
             cantidadtxt.text.clear()
             precioUnidadtxt.text.clear()
+        }
+
+        completarFactura.setOnClickListener {
+            val reparacion=requireNotNull(reparacion)
+            crearFactura(reparacion)
         }
 
         listaServicios = reparacion?.servicios?.removeSuffix(";")?.split(";")?.filter { it.isNotBlank() && it.count { c -> c == ':' } == 2 }!!.toMutableList()
@@ -115,6 +121,51 @@ class HacerFactura : Fragment() {
             }
 
             override fun onFailure(call: Call<ReparacionDTO>, t: Throwable) {
+                Log.e("LOGIN", "Error de conexión", t)
+                Toast.makeText(requireContext(), "Error al conectar a la API", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun crearFactura(reparacion: ReparacionDTO) {
+
+        val total = reparacion.servicios?.split(";")?.mapNotNull { servicio ->
+            val partes = servicio.split(":")
+            if (partes.size == 3) {
+                val precio = partes[1].toDoubleOrNull()
+                val cantidad = partes[2].toIntOrNull()
+                if (precio != null && cantidad != null) precio * cantidad else null
+            } else {
+                null
+            }
+        }?.sum() ?: 0.0
+
+        val nuevaFactura = FacturaOutputDTO(
+            fecha = LocalDate.now().toString(),
+            importeTotal = total,
+            usuarioId = SessionManager(requireContext()).getId(),
+            reparacionId = reparacion.id!!
+        )
+        RetrofitClient.facturaService.crearFactura(nuevaFactura).enqueue(object : Callback<FacturaDTO> {
+            override fun onResponse(call: Call<FacturaDTO>, response: Response<FacturaDTO>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val idFactura = response.body()?.id
+                    val reparacionCompletada = ReparacionOutputDTO(
+                        id = reparacion.id,
+                        fechaEntrada = reparacion.fechaEntrada,
+                        estado = "Pago pendiente",
+                        servicios = reparacion.servicios,
+                        motivos = reparacion.motivos,
+                        vehiculoId = reparacion.vehiculo.id!!,
+                        facturaId = idFactura
+                    )
+                    pushearServicio(reparacionCompletada)
+                } else {
+                    Toast.makeText(requireContext(), "Hubo un error en la solicitud", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<FacturaDTO>, t: Throwable) {
                 Log.e("LOGIN", "Error de conexión", t)
                 Toast.makeText(requireContext(), "Error al conectar a la API", Toast.LENGTH_SHORT).show()
             }

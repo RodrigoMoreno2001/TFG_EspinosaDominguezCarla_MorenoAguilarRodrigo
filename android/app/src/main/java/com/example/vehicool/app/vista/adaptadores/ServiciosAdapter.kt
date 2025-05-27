@@ -7,6 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehicool.R
 
+/**
+ * Adaptador para mostrar una lista de servicios añadidos por el mecánico.
+ *
+ * @param servicios Lista de Strings que representan los servicios con formato "nombre:precio:cantidad".
+ * @param onBorrar Función de borrar, pasando la posición del elemento.
+ */
+
 class ServiciosAdapter(
     private val servicios: List<String>,
     private val onBorrar: (Int) -> Unit

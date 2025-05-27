@@ -13,9 +13,17 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * Objeto singleton que configura y proporciona acceso a Retrofit.
+ */
 object RetrofitClient {
+
+    // 10.0.2.2 apunta al localhost de la máquina host.
     private const val BASE_URL = "http://10.0.2.2:8080/"
 
+    /**
+     * Configuración personalizada de Gson para adaptar tipos de fecha y hora.
+     */
     val gson = GsonBuilder()
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
         .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())

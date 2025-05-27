@@ -1,6 +1,5 @@
 package vehicool.backend.DTO.entrada
 
-// TODO FALTA LA FECHA
 data class FacturaDTO(
     val id: Long? = 0,
     val fecha: String,
