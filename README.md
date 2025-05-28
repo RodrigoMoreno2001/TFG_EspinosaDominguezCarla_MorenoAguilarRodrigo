@@ -12,7 +12,7 @@ Aplicación para la gestión de reparaciones. Consta de un backend (Spring Boot)
 
      CREATE DATABASE backendvehicool;
 
-   - Una vez creada la base de datos, ya se puede levantar el backend.
+   - Una vez creada la base de datos, ya se puede ejecutar el backend desde intellij o cualquier compilador.
 
 3. Al iniciar el backend, se creará automáticamente un usuario mecánico con las siguientes credenciales:
 
